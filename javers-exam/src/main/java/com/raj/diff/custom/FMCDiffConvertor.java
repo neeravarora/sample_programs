@@ -9,13 +9,18 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.javers.core.Javers;
 import org.javers.core.diff.Change;
 import org.javers.core.diff.Diff;
 import org.javers.core.diff.changetype.NewObject;
 import org.javers.core.diff.changetype.ObjectRemoved;
 import org.javers.core.diff.changetype.PropertyChange;
+import org.javers.core.diff.changetype.ReferenceChange;
+import org.javers.core.diff.changetype.ValueChange;
 import org.javers.core.graph.ObjectNode;
+import org.javers.core.metamodel.object.Cdo;
 import org.javers.core.metamodel.object.GlobalId;
+import org.javers.core.metamodel.object.InstanceId;
 import org.javers.core.metamodel.type.JaversProperty;
 
 import com.google.common.collect.Sets;
@@ -25,6 +30,10 @@ import com.raj.diff.custom.graph.FMCObjectNode;
 import com.raj.diff.custom.graph.FMCShallowSingleEdge;
 import com.raj.diff.custom.graph.FMCSingleEdge;
 import com.raj.diff.model.ChangeEntry;
+import com.raj.diff.model.ObjectChangeEntry;
+import com.raj.diff.model.PropertyChangeEntry;
+import com.raj.diff.model.Value;
+import com.raj.diff.model.ValueChangeEntry;
 
 public class FMCDiffConvertor {
 
@@ -67,7 +76,7 @@ public class FMCDiffConvertor {
 		System.out.println("diff obj-------------------------------");
 		System.out.println(diffMap);
 		
-		rootChangeEntry = getDiff(rootChangeEntry, leftRoot, rightRoot, diffMap, newObjectChangeMap, objectRemovedChangeMap);
+		rootChangeEntry = getDiff("Root", leftRoot, rightRoot, diffMap, newObjectChangeMap, objectRemovedChangeMap, null);
 		
 		Queue<FMCObjectNode> queue = new ConcurrentLinkedQueue<>();
 		if(leftRoot !=null)
@@ -219,97 +228,129 @@ public class FMCDiffConvertor {
 
 	}
 
-	private ChangeEntry getDiff(ChangeEntry rootChangeEntry, FMCObjectNode leftRoot, FMCObjectNode rightRoot,
+	private ChangeEntry getDiff(String propertyName, FMCObjectNode leftRoot, FMCObjectNode rightRoot,
 			Map<GlobalId, Map<Class, Map<String, Change>>> diffMap, Map<GlobalId, Change> newObjectChangeMap,
-			Map<GlobalId, Change> objectRemovedChangeMap) {
+			Map<GlobalId, Change> objectRemovedChangeMap, GlobalId parentGlobalId) {
+		
 		Map<JaversProperty, FMCEdge> leftNodeEdges = ((FMCObjectNode)leftRoot).getEdges();
 		Map<JaversProperty, FMCEdge> rightNodeEdges = ((FMCObjectNode)rightRoot).getEdges();
+		ObjectChangeEntry objectChangeEntry = new ObjectChangeEntry(propertyName);
 		
-		if(leftNodeEdges == null || leftNodeEdges.isEmpty()){
-			
-		}else if(rightNodeEdges == null || rightNodeEdges.isEmpty()){
-			
-		}else{
 
-//			Iterator<Entry<JaversProperty, FMCEdge>> leftNodeEdgesIterator = leftNodeEdges.entrySet().iterator();
-//			Iterator<Entry<JaversProperty, FMCEdge>> rightNodeEdgesIterator = rightNodeEdges.entrySet().iterator();
-//			
-//			Entry<JaversProperty, FMCEdge> currentLeftNodeEdgeEntry = null;
-//			Entry<JaversProperty, FMCEdge> currentRightNodeEdgeEntry = null;
-//			while (leftNodeEdgesIterator.hasNext() && rightNodeEdgesIterator.hasNext()) {
-//				if (currentLeftNodeEdgeEntry == null)
-//					currentLeftNodeEdgeEntry = leftNodeEdgesIterator.next();
-//				if (currentLeftNodeEdgeEntry == null)
-//					currentRightNodeEdgeEntry = rightNodeEdgesIterator.next();
-//				if(currentLeftNodeEdgeEntry.getKey().equals(currentLeftNodeEdgeEntry.getKey())){
-//					
-//				}
-//
-//			}
-			
-			
-//			for (Entry<JaversProperty, FMCEdge> leftNodeEdgeEntry : leftNodeEdges.entrySet()) {
-//			FMCEdge rightNodeEdge = rightNodeEdges.get(leftNodeEdgeEntry.getKey());
-//		}
-			
-			
-			Set<JaversProperty> leftNodeEdgeKeySet = leftNodeEdges.keySet();
-			Set<JaversProperty> rightNodeEdgeKeySet = rightNodeEdges.keySet();
-			
 		
-			Set<JaversProperty> commonNodeEdgeKeySet = Sets.intersection(leftNodeEdgeKeySet, rightNodeEdgeKeySet);
-			for (JaversProperty javersProperty : commonNodeEdgeKeySet) {
-				FMCEdge leftNodeEdge = leftNodeEdges.get(javersProperty);
-				FMCEdge rightNodeEdge = rightNodeEdges.get(javersProperty);
-				proccessCommonEdge(rootChangeEntry, diffMap, newObjectChangeMap, objectRemovedChangeMap, leftNodeEdge,
-						rightNodeEdge);
+		// TODO data property need to process 
+		GlobalId leftGlobalId = leftRoot.getGlobalId();
+		GlobalId rightGlobalId = rightRoot.getGlobalId();
+		if (leftGlobalId instanceof InstanceId && rightGlobalId instanceof InstanceId) {
+			if (leftGlobalId.equals(rightGlobalId)) {
+				Map<String, Change> propertyChangeMap = diffMap.get(leftGlobalId).get(ValueChange.class);
+				for (Entry<String, Change> entry : propertyChangeMap.entrySet()) {
+					ValueChange change = (ValueChange) entry.getValue();
+					ValueChangeEntry valueChangeEntry = new ValueChangeEntry(entry.getKey(),new Value(change.getLeft()), new Value(change.getRight()));
+					objectChangeEntry.addPropertyChangeEntry(entry.getKey(), valueChangeEntry);
+				}
+
+		// TODO
+
+				if (leftNodeEdges == null || leftNodeEdges.isEmpty()) {
+
+				} else if (rightNodeEdges == null || rightNodeEdges.isEmpty()) {
+
+				} else {
+
+					Set<JaversProperty> leftNodeEdgeKeySet = leftNodeEdges.keySet();
+					Set<JaversProperty> rightNodeEdgeKeySet = rightNodeEdges.keySet();
+
+					Set<JaversProperty> commonNodeEdgeKeySet = Sets.intersection(leftNodeEdgeKeySet,
+							rightNodeEdgeKeySet);
+					for (JaversProperty javersProperty : commonNodeEdgeKeySet) {
+						FMCEdge leftNodeEdge = leftNodeEdges.get(javersProperty);
+						FMCEdge rightNodeEdge = rightNodeEdges.get(javersProperty);
+						objectChangeEntry.addPropertyChangeEntry(javersProperty.getName(),
+								(PropertyChangeEntry) proccessCommonEdge(diffMap, newObjectChangeMap,
+										objectRemovedChangeMap, leftNodeEdge, rightNodeEdge, parentGlobalId));
+					}
+					Set<JaversProperty> onlyLeftNodeEdgeKeySet = Sets.difference(leftNodeEdgeKeySet,
+							rightNodeEdgeKeySet);
+					for (JaversProperty javersProperty : onlyLeftNodeEdgeKeySet) {
+						FMCEdge leftNodeEdge = leftNodeEdges.get(javersProperty);
+						// FMCEdge rightNodeEdge =
+						// leftNodeEdges.get(javersProperty);
+						proccessOnlyLeftEdge(objectChangeEntry, diffMap, newObjectChangeMap, objectRemovedChangeMap,
+								leftNodeEdge);
+					}
+					Set<JaversProperty> onlyRightNodeEdgeKeySet = Sets.difference(rightNodeEdgeKeySet,
+							leftNodeEdgeKeySet);
+					for (JaversProperty javersProperty : onlyRightNodeEdgeKeySet) {
+						// FMCEdge leftNodeEdge =
+						// leftNodeEdges.get(javersProperty);
+						FMCEdge rightNodeEdge = leftNodeEdges.get(javersProperty);
+						proccessOnlyRightEdge(objectChangeEntry, diffMap, newObjectChangeMap, objectRemovedChangeMap,
+								rightNodeEdge);
+					}
+
+				}
+
+			} else {
+				objectChangeEntry.addPropertyChangeEntry(propertyName, (PropertyChangeEntry) getJaversDiff(leftRoot.getCdo().getWrappedCdo(), rightRoot.getCdo().getWrappedCdo()));
+				//Map<String, Change> propertyChangeMap = diffMap.get(parentGlobalId).get(ReferenceChange.class);
+				//for (Entry<String, Change> entry : propertyChangeMap.entrySet()) {
+//					ReferenceChange change = (ReferenceChange) entry.getValue();
+//					GlobalId left= change.getLeft();
+//					GlobalId right= change.getRight();
+					
+					
+					
+					
+//					ValueChangeEntry valueChangeEntry = new ValueChangeEntry(entry.getKey(),new Value(change.getLeft()), new Value(change.getRight()));
+//					objectChangeEntry.addPropertyChangeEntry(entry.getKey(), valueChangeEntry);
+			//	}
 			}
-    	    Set<JaversProperty> onlyLeftNodeEdgeKeySet = Sets.difference(leftNodeEdgeKeySet, rightNodeEdgeKeySet);
-    	    for (JaversProperty javersProperty : onlyLeftNodeEdgeKeySet) {
-				FMCEdge leftNodeEdge = leftNodeEdges.get(javersProperty);
-				//FMCEdge rightNodeEdge = leftNodeEdges.get(javersProperty);
-				proccessOnlyLeftEdge(rootChangeEntry, diffMap, newObjectChangeMap, objectRemovedChangeMap, leftNodeEdge
-						);
-			}
-		    Set<JaversProperty> onlyRightNodeEdgeKeySet	= Sets.difference(rightNodeEdgeKeySet, leftNodeEdgeKeySet);
-		    for (JaversProperty javersProperty : onlyRightNodeEdgeKeySet) {
-				//FMCEdge leftNodeEdge = leftNodeEdges.get(javersProperty);
-				FMCEdge rightNodeEdge = leftNodeEdges.get(javersProperty);
-				proccessOnlyRightEdge(rootChangeEntry, diffMap, newObjectChangeMap, objectRemovedChangeMap, rightNodeEdge);
-			}
-			
 		}
 		
 		return null;
 	}
 
-	private void proccessOnlyRightEdge(ChangeEntry rootChangeEntry,
+	private ChangeEntry getJaversDiff(Object left, Object right) {
+		Javers javers = FMCJaversBuilder.javers().build();
+		return ((FMCJaversCore)javers).compareAndConvert(left, right);
+	}
+
+	private ChangeEntry proccessOnlyRightEdge(ChangeEntry rootChangeEntry,
 			Map<GlobalId, Map<Class, Map<String, Change>>> diffMap, Map<GlobalId, Change> newObjectChangeMap,
 			Map<GlobalId, Change> objectRemovedChangeMap, FMCEdge rightNodeEdge) {
 		// TODO Auto-generated method stub
+		return null;
 		
 	}
 
-	private void proccessOnlyLeftEdge(ChangeEntry rootChangeEntry,
+	private ChangeEntry proccessOnlyLeftEdge(ChangeEntry rootChangeEntry,
 			Map<GlobalId, Map<Class, Map<String, Change>>> diffMap, Map<GlobalId, Change> newObjectChangeMap,
 			Map<GlobalId, Change> objectRemovedChangeMap, FMCEdge leftNodeEdge) {
-		// TODO Auto-generated method stub
 		
+		
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	private void proccessCommonEdge(ChangeEntry rootChangeEntry, Map<GlobalId, Map<Class, Map<String, Change>>> diffMap,
+	private ChangeEntry proccessCommonEdge(Map<GlobalId, Map<Class, Map<String, Change>>> diffMap,
 			Map<GlobalId, Change> newObjectChangeMap, Map<GlobalId, Change> objectRemovedChangeMap,
-			FMCEdge leftNodeEdge, FMCEdge rightNodeEdge) {
-		if (leftNodeEdge != null && rightNodeEdge != null)
+			FMCEdge leftNodeEdge, FMCEdge rightNodeEdge, GlobalId parentGlobalId) {
+		
+		if (leftNodeEdge != null && rightNodeEdge != null) {
+			
 			if (leftNodeEdge instanceof FMCSingleEdge) {
-				FMCObjectNode leftEdgeReference = (FMCObjectNode) ((FMCSingleEdge) leftNodeEdge)
-						.getReferenceNode();
-				FMCObjectNode rightEdgeReference = (FMCObjectNode) ((FMCSingleEdge) rightNodeEdge)
-						.getReferenceNode();
-				getDiff(rootChangeEntry, leftEdgeReference, rightEdgeReference, diffMap, newObjectChangeMap,
-						objectRemovedChangeMap);
+				String propertyName = leftNodeEdge.getProperty().getName();
+				ObjectChangeEntry changeEntry = new ObjectChangeEntry(propertyName);
+				FMCObjectNode leftEdgeReference = (FMCObjectNode) ((FMCSingleEdge) leftNodeEdge).getReferenceNode();
+				FMCObjectNode rightEdgeReference = (FMCObjectNode) ((FMCSingleEdge) rightNodeEdge).getReferenceNode();
+				
+				return getDiff(propertyName, leftEdgeReference, rightEdgeReference, diffMap, newObjectChangeMap,
+						objectRemovedChangeMap, parentGlobalId);
 			} else if (leftNodeEdge instanceof FMCMultiEdge) {
 
 			}
+		}
+		return null;
 	}
 }
