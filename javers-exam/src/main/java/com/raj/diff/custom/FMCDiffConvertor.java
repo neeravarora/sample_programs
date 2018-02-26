@@ -17,6 +17,11 @@ import org.javers.core.diff.changetype.ObjectRemoved;
 import org.javers.core.diff.changetype.PropertyChange;
 import org.javers.core.diff.changetype.ReferenceChange;
 import org.javers.core.diff.changetype.ValueChange;
+import org.javers.core.diff.changetype.container.ListChange;
+import org.javers.core.diff.changetype.container.SetChange;
+import org.javers.core.diff.changetype.container.ValueAdded;
+import org.javers.core.diff.changetype.container.ValueRemoved;
+import org.javers.core.diff.changetype.map.MapChange;
 import org.javers.core.graph.ObjectNode;
 import org.javers.core.metamodel.object.Cdo;
 import org.javers.core.metamodel.object.GlobalId;
@@ -30,6 +35,7 @@ import com.raj.diff.custom.graph.FMCObjectNode;
 import com.raj.diff.custom.graph.FMCShallowSingleEdge;
 import com.raj.diff.custom.graph.FMCSingleEdge;
 import com.raj.diff.model.ChangeEntry;
+import com.raj.diff.model.ListValueChangeEntry;
 import com.raj.diff.model.ObjectChangeEntry;
 import com.raj.diff.model.PropertyChangeEntry;
 import com.raj.diff.model.Value;
@@ -257,7 +263,7 @@ public class FMCDiffConvertor {
 				} else if (rightNodeEdges == null || rightNodeEdges.isEmpty()) {
 
 				} else {
-
+					parentGlobalId = leftGlobalId;
 					Set<JaversProperty> leftNodeEdgeKeySet = leftNodeEdges.keySet();
 					Set<JaversProperty> rightNodeEdgeKeySet = rightNodeEdges.keySet();
 
@@ -292,7 +298,10 @@ public class FMCDiffConvertor {
 				}
 
 			} else {
-				objectChangeEntry.addPropertyChangeEntry(propertyName, (PropertyChangeEntry) getJaversDiff(leftRoot.getCdo().getWrappedCdo(), rightRoot.getCdo().getWrappedCdo()));
+				//TODO next line temp commented
+				//objectChangeEntry.addPropertyChangeEntry(propertyName, (PropertyChangeEntry) getJaversDiff(leftRoot.getCdo().getWrappedCdo(), rightRoot.getCdo().getWrappedCdo()));
+				
+				
 				//Map<String, Change> propertyChangeMap = diffMap.get(parentGlobalId).get(ReferenceChange.class);
 				//for (Entry<String, Change> entry : propertyChangeMap.entrySet()) {
 //					ReferenceChange change = (ReferenceChange) entry.getValue();
@@ -341,16 +350,67 @@ public class FMCDiffConvertor {
 			
 			if (leftNodeEdge instanceof FMCSingleEdge) {
 				String propertyName = leftNodeEdge.getProperty().getName();
-				ObjectChangeEntry changeEntry = new ObjectChangeEntry(propertyName);
+				//ObjectChangeEntry changeEntry = new ObjectChangeEntry(propertyName);
 				FMCObjectNode leftEdgeReference = (FMCObjectNode) ((FMCSingleEdge) leftNodeEdge).getReferenceNode();
 				FMCObjectNode rightEdgeReference = (FMCObjectNode) ((FMCSingleEdge) rightNodeEdge).getReferenceNode();
 				
 				return getDiff(propertyName, leftEdgeReference, rightEdgeReference, diffMap, newObjectChangeMap,
 						objectRemovedChangeMap, parentGlobalId);
 			} else if (leftNodeEdge instanceof FMCMultiEdge) {
+				String propertyName = leftNodeEdge.getProperty().getName();
+				
+				List<ObjectNode> leftEdgeReferences = ((FMCMultiEdge) leftNodeEdge).getReferences();
+				List<ObjectNode> rightEdgeReferences =  ((FMCMultiEdge) rightNodeEdge).getReferences();
+				
+				Class propertyType = leftNodeEdge.getProperty().getRawType();
+				if(propertyType.isAssignableFrom(List.class)){
+					System.out.println("List: " + propertyName );
+					ListChange listChange = (ListChange) diffMap.get(parentGlobalId).get(ListChange.class).get(propertyName);
+					processList(diffMap, objectRemovedChangeMap, objectRemovedChangeMap, rightEdgeReferences, rightEdgeReferences, listChange, parentGlobalId);
+				}else if(propertyType.isAssignableFrom(Set.class)){
+					System.out.println("Set: " + propertyName );
+
+					SetChange setChange = (SetChange) diffMap.get(parentGlobalId).get(SetChange.class).get(propertyName);
+					processSet(diffMap, objectRemovedChangeMap, objectRemovedChangeMap, rightEdgeReferences, rightEdgeReferences, setChange, parentGlobalId);
+				}else if(propertyType.isAssignableFrom(Map.class)){
+					System.out.println("Map: " + propertyName );
+
+					MapChange mapChange = (MapChange) diffMap.get(parentGlobalId).get(MapChange.class).get(propertyName);
+					processMap(diffMap, objectRemovedChangeMap, objectRemovedChangeMap, rightEdgeReferences, rightEdgeReferences, mapChange, parentGlobalId);
+				}
+			
+				
+				
 
 			}
 		}
 		return null;
+	}
+	
+	private ChangeEntry processList(Map<GlobalId, Map<Class, Map<String, Change>>> diffMap,
+			Map<GlobalId, Change> newObjectChangeMap, Map<GlobalId, Change> objectRemovedChangeMap,
+			List<ObjectNode> leftEdgeReferences, List<ObjectNode> rightEdgeReferences, ListChange listChange, GlobalId parentGlobalId){
+		    ListValueChangeEntry changeEntry = new ListValueChangeEntry<>(listChange.getPropertyName(), null);
+		    List<ValueAdded> addeds = listChange.getValueAddedChanges();
+		    List<ValueRemoved> removeds = listChange.getValueRemovedChanges();
+		    
+		return null;
+		
+	}
+	
+	private ChangeEntry processSet(Map<GlobalId, Map<Class, Map<String, Change>>> diffMap,
+			Map<GlobalId, Change> newObjectChangeMap, Map<GlobalId, Change> objectRemovedChangeMap,
+			List<ObjectNode> leftEdgeReferences, List<ObjectNode> rightEdgeReferences, SetChange setChange, GlobalId parentGlobalId){
+		
+		return null;
+		
+	}
+	
+	private ChangeEntry processMap(Map<GlobalId, Map<Class, Map<String, Change>>> diffMap,
+			Map<GlobalId, Change> newObjectChangeMap, Map<GlobalId, Change> objectRemovedChangeMap,
+			List<ObjectNode> leftEdgeReferences, List<ObjectNode> rightEdgeReferences, MapChange mapChange, GlobalId parentGlobalId){
+		
+		return null;
+		
 	}
 }

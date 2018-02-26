@@ -14,7 +14,7 @@ public class Employee extends Person{
 	
     private Employee boss;
 
-   // private final List<Employee> subordinates = new ArrayList<>();
+    private final List<Employee> subordinates = new ArrayList<>();
     
     private Project currentProject;
     
@@ -25,6 +25,8 @@ public class Employee extends Person{
     private Map<Integer, Team> teamMap = new HashMap<>();
     
     private List<Asset> assets = new ArrayList<>();
+    
+    private List<SharedAsset> sharedAssets = new ArrayList<>();
 
 	public Long getSalary() {
 		return salary;
@@ -94,6 +96,16 @@ public class Employee extends Person{
 	public void removeWorkHistory(Team team) {
 		this.workHistory.remove(team);
 	}
+	
+	 public Employee addSharedAsset(SharedAsset asset) {
+		 sharedAssets.add(asset);
+	         return this;
+	     }
+	 
+	 public Employee removeSharedAsset(SharedAsset asset) {
+		 sharedAssets.remove(asset);
+	         return this;
+	     }
 	
 	 public Employee addAsset(Asset asset) {
 		 assets.add(asset);

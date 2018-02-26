@@ -4,7 +4,7 @@ import org.javers.core.metamodel.annotation.Id;
 
 public class Child {
 	
-	//@Id
+	 @Id
 	 Integer id;
 	 String name;
 	public Child(Integer id, String name) {

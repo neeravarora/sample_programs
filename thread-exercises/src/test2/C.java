@@ -4,7 +4,7 @@ public class C extends B
 {
 
 	@Override
-	protected void test() {
+	public void test() {
 		// TODO Auto-generated method stub
 		
 	}

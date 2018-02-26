@@ -7,6 +7,7 @@ import java.util.Map;
 import org.javers.core.Javers;
 import org.javers.core.JaversBuilder;
 import org.javers.core.diff.Diff;
+import org.javers.core.diff.ListCompareAlgorithm;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -34,11 +35,10 @@ public class DiffExtractorTest {
 	public void test() {
 		
 		Javers javers = //JaversBuilder.javers().build();
-				FMCJaversBuilder.javers().build();
-		//Diff diff = javers.compare(eOld, eModified);
-		((FMCJaversCore)javers).compareAndConvert(eOld, eModified);
+				FMCJaversBuilder.javers().withListCompareAlgorithm(ListCompareAlgorithm.LEVENSHTEIN_DISTANCE).build();
+	    Diff diff = javers.compare(eOld, eModified);
 		//((FMCJaversCore)javers).compareAndConvert(eOld, eModified);
-		// System.out.println(diff);
+		 System.out.println(diff);
 		 
 		 
 		// String json = javers.getJsonConverter().toJson(diff);
@@ -207,9 +207,9 @@ public class DiffExtractorTest {
 		reportee2.addWorkHistory(team5, project5);
 		reportee2.addWorkHistory(team6, project6);
 		
-//		eOld.addSubordinate(reportee1);
-//		eOld.addSubordinate(reportee2);
-//		
+		eOld.addSubordinate(reportee1);
+		eOld.addSubordinate(reportee2);
+		
 		
 		
 		
@@ -242,15 +242,15 @@ public class DiffExtractorTest {
 		
 		
 		
-//		Employee reportee11 = new Employee(4l);
-//		reportee11.setName("Developer1");
-//		reportee11.setSalary(79l);
-//		reportee11.setAge(18l);
-//		
-//		reportee1.setContactInfo(contactInfo2 );
-//		reportee1.setCurrentTeam(team1 );
-//		reportee1.setCurrentProject(project1);
-//		reportee1.addWorkHistory(team4, project4);
+		Employee reportee11 = new Employee(4l);
+		reportee11.setName("Developer1");
+		reportee11.setSalary(79l);
+		reportee11.setAge(18l);
+		
+		reportee1.setContactInfo(contactInfo2 );
+		reportee1.setCurrentTeam(team1 );
+		reportee1.setCurrentProject(project1);
+		reportee1.addWorkHistory(team4, project4);
 		
 		
 		Employee reportee12 = new Employee(2l);
@@ -288,9 +288,9 @@ public class DiffExtractorTest {
 		
 		//eModified.addSubordinate(reportee11);
 		
-//		eModified.addSubordinate(reportee12);
-//		eModified.addSubordinate(reportee13);
-//		eModified.addSubordinate(reportee14);
+		eModified.addSubordinate(reportee12);
+		eModified.addSubordinate(reportee13);
+		eModified.addSubordinate(reportee14);
 	}
 	
 	

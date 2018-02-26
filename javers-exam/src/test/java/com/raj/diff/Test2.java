@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.javers.core.Javers;
+import org.javers.core.JaversBuilder;
 import org.javers.core.diff.Diff;
 
 import com.raj.diff.custom.FMCJaversBuilder;
@@ -16,7 +17,7 @@ import com.raj.diff.model.Exam;
 public class Test2 {
 	@org.junit.Test
 	public void test() {
-		Javers javers = //JaversBuilder.javers().build();
+		Javers javers = JaversBuilder.javers().build();
 				FMCJaversBuilder.javers().build();
 		//Diff diff = javers.compare(eOld, eModified);
 		Exam exam = new Exam();

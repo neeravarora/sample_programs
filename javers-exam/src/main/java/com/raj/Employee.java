@@ -14,7 +14,7 @@ public class Employee extends Person{
 	
     private Employee boss;
 
-    //private final List<Employee> subordinates = new ArrayList<>();
+    private final List<Employee> subordinates = new ArrayList<>();
     
     private Project currentProject;
     
@@ -38,29 +38,29 @@ public class Employee extends Person{
          this.setId(id);
      }
 	
-//    public Employee(String name, Long salary) {
-//        // checkNotNull(name);
-//         this.setName(name);
-//         this.salary = salary;
-//     }
+    public Employee(String name, Long salary) {
+        // checkNotNull(name);
+         this.setName(name);
+         this.salary = salary;
+     }
 
-//     public Employee addSubordinate(Employee employee) {
-//        // checkNotNull(employee);
-//         employee.boss = this;
-//         subordinates.add(employee);
-//         return this;
-//     }
-//     
-//     public Employee addSubordinates(Employee... employees) {
-//         // checkNotNull(employees);
-//   
-//     	for (Employee employee : employees) {
-//     		employee.boss = this;
-//             subordinates.add(employee);
-// 		}
-//          
-//          return this;
-//      }
+     public Employee addSubordinate(Employee employee) {
+        // checkNotNull(employee);
+         employee.boss = this;
+         subordinates.add(employee);
+         return this;
+     }
+     
+     public Employee addSubordinates(Employee... employees) {
+         // checkNotNull(employees);
+   
+     	for (Employee employee : employees) {
+     		employee.boss = this;
+             subordinates.add(employee);
+ 		}
+          
+          return this;
+      }
 
 	
 	

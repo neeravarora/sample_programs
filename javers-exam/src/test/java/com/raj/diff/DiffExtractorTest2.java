@@ -15,6 +15,7 @@ import com.raj.modelSet2.Asset;
 import com.raj.modelSet2.ContactInfo;
 import com.raj.modelSet2.Employee;
 import com.raj.modelSet2.Project;
+import com.raj.modelSet2.SharedAsset;
 import com.raj.modelSet2.Team;
 import com.raj.diff.custom.FMCJaversBuilder;
 import com.raj.diff.custom.FMCJaversCore;
@@ -79,6 +80,43 @@ public class DiffExtractorTest2 {
 		asset6.setAssetName("Window");
 		asset6.setType("moblile");
 		asset6.setWorth("0.3 lac");
+		
+		
+		SharedAsset sharedAsset1 = new SharedAsset();
+		sharedAsset1.setId(1l);
+		sharedAsset1.setAssetName("Mac");
+		sharedAsset1.setType("Lapy");
+		sharedAsset1.setWorth("1.65 lac");
+		
+		SharedAsset sharedAsset2 = new SharedAsset();
+		sharedAsset2.setId(2l);
+		sharedAsset2.setAssetName("Lenovo");
+		sharedAsset2.setType("Lapy");
+		sharedAsset2.setWorth("1.3 lac");
+		
+		SharedAsset sharedAsset3 = new SharedAsset();
+		sharedAsset3.setId(3l);
+		sharedAsset3.setAssetName("Dell");
+		sharedAsset3.setType("Lapy");
+		sharedAsset3.setWorth("0.6 lac");
+		
+		SharedAsset sharedAsset4 = new SharedAsset();
+		sharedAsset4.setId(4l);
+		sharedAsset4.setAssetName("Iphone");
+		sharedAsset4.setType("moblile");
+		sharedAsset4.setWorth("0.6 lac");
+		
+		SharedAsset sharedAsset5 = new SharedAsset();
+		sharedAsset5.setId(5l);
+		sharedAsset5.setAssetName("Android");
+		sharedAsset5.setType("moblile");
+		sharedAsset5.setWorth("0.2 lac");
+		
+		SharedAsset sharedAsset6 = new SharedAsset();
+		sharedAsset6.setId(6l);
+		sharedAsset6.setAssetName("Window");
+		sharedAsset6.setType("moblile");
+		sharedAsset6.setWorth("0.3 lac");
 		
 		Team team1 = new Team(1l);
 		team1.setTeamName("VPN Team");
@@ -182,6 +220,10 @@ public class DiffExtractorTest2 {
 		eOld.addAsset(asset2);
 		eOld.addAsset(asset4);
 		
+		eOld.addSharedAsset(sharedAsset1);
+		eOld.addSharedAsset(sharedAsset2);
+		eOld.addSharedAsset(sharedAsset4);
+		
 		eOld.addTeam(1, team1);
 		eOld.addTeam(2, team2);
 		eOld.addTeam(3, team4);
@@ -235,9 +277,14 @@ public class DiffExtractorTest2 {
 		eModified.addWorkHistory(team3, project4);
 		eModified.addWorkHistory(team5, project7);
 		
+		eModified.addSharedAsset(sharedAsset3);
+		eModified.addSharedAsset(sharedAsset1);
+		eModified.addSharedAsset(sharedAsset4);
+		
 		eModified.addAsset(asset3);
 		eModified.addAsset(asset1);
 		eModified.addAsset(asset4);
+		eModified.addAsset(asset5);
 		
 		eModified.addTeam(1, team3);
 		eModified.addTeam(2, team1);
@@ -245,15 +292,15 @@ public class DiffExtractorTest2 {
 		
 		
 		
-//		Employee reportee11 = new Employee(4l);
-//		reportee11.setName("Developer1");
-//		reportee11.setSalary(79l);
-//		reportee11.setAge(18l);
-//		
-//		reportee1.setContactInfo(contactInfo2 );
-//		reportee1.setCurrentTeam(team1 );
-//		reportee1.setCurrentProject(project1);
-//		reportee1.addWorkHistory(team4, project4);
+		Employee reportee11 = new Employee(4l);
+		reportee11.setName("Developer1");
+		reportee11.setSalary(79l);
+		reportee11.setAge(18l);
+		
+		reportee1.setContactInfo(contactInfo2 );
+		reportee1.setCurrentTeam(team1 );
+		reportee1.setCurrentProject(project1);
+		reportee1.addWorkHistory(team4, project4);
 		
 		
 		Employee reportee12 = new Employee(2l);
