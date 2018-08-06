@@ -60,7 +60,7 @@ public class InventoryServiceImpl implements InventoryService{
 		if (status)
 			return new Response<String>(MessageConstants.DISCOUNT_APPLIED);
 		else
-			return new Response<String>(MessageConstants.FAILED);
+			return new Response<String>(MessageConstants.DISCOUNT_NOT_APPLIED);
 
 	};
 	
@@ -73,7 +73,7 @@ public class InventoryServiceImpl implements InventoryService{
 		if (status)
 			return new Response<String>(MessageConstants.DISCOUNT_APPLIED);
 		else
-			return new Response<String>(MessageConstants.FAILED);
+			return new Response<String>(MessageConstants.DISCOUNT_NOT_APPLIED);
 
 	};
 	

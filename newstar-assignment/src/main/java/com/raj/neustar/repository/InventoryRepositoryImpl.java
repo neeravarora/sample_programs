@@ -10,8 +10,10 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
 
 
@@ -254,6 +256,7 @@ public class InventoryRepositoryImpl implements InventoryRepository{
 		public ProductNode(Integer id, String name, Double price) {
 			super(id, name);
 			this.price = price;
+			this.sellingPrice = price;
 		}
 
 		@Override
@@ -278,12 +281,43 @@ public class InventoryRepositoryImpl implements InventoryRepository{
 			return true;
 		}
 
+//		@Override
+//		public boolean applyStrategy() {
+//			Strategy<Double, Double> strategy;
+//			if ((strategy = getStrategy()) != null)
+//				sellingPrice = (Double) strategy.execute(getPrice());
+//			return true;
+//		}
+		
 		@Override
 		public boolean applyStrategy() {
-			Strategy<Double, Double> strategy;
-			if ((strategy = getStrategy()) != null)
-				sellingPrice = (Double) strategy.execute(getPrice());
+			Double discount = calculateDiscount();
+			if(getPrice()/2 <= discount) 
+				return false;
+			
+			this.sellingPrice = getPrice() - discount;
 			return true;
+		}
+		
+		public boolean isValidDiscount() {
+			Double discount = calculateDiscount();
+			if(getPrice()/2 <= discount) 
+				return false;
+			return true;
+		}
+
+		private Double calculateDiscount() {
+			Strategy<Double, Double> strategy;
+			Double discount = 0.0;
+			Node node = this;
+			
+			while (node != null) {
+				if ((strategy = node.getStrategy()) != null) {
+					discount = discount + getPrice() - (Double) strategy.execute(getPrice());
+				}
+				node = node.getParent();
+			}
+			return discount;
 		}
 
 		public Double getSellingPrice() {
@@ -343,13 +377,17 @@ public class InventoryRepositoryImpl implements InventoryRepository{
 
 		@Override
 		public boolean applyStrategy() {
-			if (getStrategy() != null) {
-				getAllLeafNodes().forEachRemaining(node -> {
-					node.setStrategy(getStrategy());
-					node.applyStrategy();
-				});
+
+			class StatusHolder {
+				Boolean status = true;
 			}
-			return true;
+			final StatusHolder statusHolder = new StatusHolder();
+
+			getAllLeafNodes().forEachRemaining(node -> statusHolder.status = statusHolder.status && ((ProductNode) node).isValidDiscount());
+			if (statusHolder.status)
+				getAllLeafNodes().forEachRemaining(node -> statusHolder.status = statusHolder.status && node.applyStrategy());
+			return statusHolder.status;
+
 		}
 
 		@Override

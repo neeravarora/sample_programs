@@ -9,11 +9,11 @@ import com.raj.neustar.dto.ProductInfo;
  */
 public interface InventoryRepository {
 
-	boolean applyDiscount(Integer convert, Strategy<Double, Double> flatDisStrategy);
+	boolean applyDiscount(Integer categoryOrProductId, Strategy<Double, Double> strategy);
 
-	Integer addCategoryOrProduct(Integer convert, Integer convert2, String string, Double convert3);
+	Integer addCategoryOrProduct(Integer parentId, Integer childId, String name, Double price);
 
-	boolean removeCategoryOrProduct(Integer convert);
+	boolean removeCategoryOrProduct(Integer categoryOrProductId);
 
 	ProductInfo getMaxDiscountedItem(Integer categoryId);
 

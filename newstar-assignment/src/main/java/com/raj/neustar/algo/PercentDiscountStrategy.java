@@ -13,7 +13,7 @@ public class PercentDiscountStrategy implements Strategy<Double, Double> {
 	}
 	
 	@Override
-	public Double execute(Double origional) {
-		return origional*(100-percentValue)/100;
+	public Double execute(Double price) {
+		return price*(100-percentValue)/100;
 	}
 }
