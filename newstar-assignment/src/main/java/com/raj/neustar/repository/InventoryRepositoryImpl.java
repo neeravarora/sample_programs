@@ -31,7 +31,7 @@ public class InventoryRepositoryImpl implements InventoryRepository{
 //	public Map<Integer, Node> getCache() {
 //		return nodeCache;
 //	}
-
+	
 	@Override
 	public void load(String file) {
 		FileReader fr = null;
@@ -177,8 +177,7 @@ public class InventoryRepositoryImpl implements InventoryRepository{
 		}
 		
 		if (node instanceof CategoryNode) {
-			node = getProductsByCatgory(categoryId).stream().max((pN1, pN2) -> {
-//System.out.println(pN1.getName()+ "" pN2.getName());				
+			node = getProductsByCatgory(categoryId).stream().max((pN1, pN2) -> {			
 				if (pN1.getPrice() - pN1.getSellingPrice() == (pN2.getPrice()- pN2.getSellingPrice()))
 					return pN2.getId().compareTo(pN1.getId());
 				else if (pN1.getPrice() - pN1.getSellingPrice() > (pN2.getPrice()- pN2.getSellingPrice() ))

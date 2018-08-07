@@ -16,7 +16,7 @@ import com.raj.neustar.util.FileUtil;
  *
  */
 public class Main {
-	
+
 	public static void main(String[] args) throws IOException {
 
 		InventoryRepository inventoryRepository = new InventoryRepositoryImpl();
@@ -25,7 +25,7 @@ public class Main {
 
 		inventoryService.load(".\\src\\main\\resources\\data.txt");
 
-		FileUtil.read(".\\src\\main\\resources\\query.txt", line -> {
+		FileUtil.readGivenNumsOfLines(".\\src\\main\\resources\\query.txt", line -> {
 			if (line.charAt(0) == '3') {
 				Response<ProductInfo> productInfoResponse = inventoryService.query(line, ProductInfo.class);
 				System.out.println(productInfoResponse.getData());
@@ -33,6 +33,7 @@ public class Main {
 				Response<String> response = inventoryService.query(line, String.class);
 				System.out.println(response.getData());
 			}
+			return true;
 
 		});
 

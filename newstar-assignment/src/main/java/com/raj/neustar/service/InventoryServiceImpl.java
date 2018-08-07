@@ -97,8 +97,7 @@ public class InventoryServiceImpl implements InventoryService{
 			return new Response<String>(MessageConstants.FAILED);
 
 	};
-	
-	
+
 	private final QueryEvaluator<String> removeItemEvalutor = (query, clazz, params) -> {
 
 		boolean status = inventoryRepository
@@ -109,62 +108,5 @@ public class InventoryServiceImpl implements InventoryService{
 			return new Response<String>(MessageConstants.FAILED);
 
 	};
-
-//	//@Override
-//	public  <T extends Object> T query1(String query, Class<T> clazz) {
-//		if (query == null || query.isEmpty())
-//			throw new IllegalArgumentException("Invaild query");
-//		String[] queryTokens = query.split(" ");
-//		QueryType queryType = QueryType.getQueryType(queryTokens[0]);
-//		Strategy strategy = null;
-//		boolean status = false;
-//		switch (queryType) {
-//		case FLAT_DISCOUNT:
-//			validateQueryLength(queryTokens, 3);
-//			strategy = strategyFactory.getFlatDisStrategy(Utility.convert(queryTokens[2], Double.class));
-//			status = inventoryRepository.applyDiscount(Utility.convert(queryTokens[1], Integer.class),strategy
-//					);
-//			return (T)getResponse((Object)MessageConstants.DISCOUNT_APPLIED, status, clazz);
-//		case PERCENT_DISCOUNT:
-//			validateQueryLength(queryTokens, 3);
-//			boolean status1 = inventoryRepository.applyDiscount(Utility.convert(queryTokens[1], Integer.class),
-//					strategyFactory.getPercentageDisStrategy(Utility.convert(queryTokens[2], Double.class)));
-//			return getResponse((T)MessageConstants.DISCOUNT_APPLIED, status, clazz);
-//		case MAX_DIS_UNDER_CATEGORY:
-//			validateQueryLength(queryTokens, 2);
-//			inventoryRepository.getMaxDiscountedItem(Utility.convert(queryTokens[1], Integer.class));
-//			break;
-//		case ADD_ITEM:
-//			validateQueryLength(queryTokens, 2);
-//			inventoryRepository.addCategoryOrProduct(
-//					Utility.convert(queryTokens[1], Integer.class), 
-//					Utility.convert(queryTokens[2], Integer.class), 
-//					queryTokens[3], 
-//					Utility.convert(queryTokens[4], Double.class));
-//			break;
-//		case REMOVE_ITEM:
-//			validateQueryLength(queryTokens, 2);
-//			inventoryRepository.removeCategoryOrProduct(Utility.convert(queryTokens[1], Integer.class));
-//			break;
-//		case INVALID_QUERY:
-//			break;
-//
-//		}
-//
-//		return null;
-//	}
-//
-//	private Object getResponse(Object result, boolean status, Class clazz) {
-//		if(clazz.equals(String.class))
-//		   return status  ? result : MessageConstants.FAILED ;
-//		else 
-//			throw new IllegalArgumentException("Invaild query");
-//	}
-//	
-//	void validateQueryLength(String[] queryToken, int length) {
-//		if(queryToken.length != length) {
-//			throw new IllegalArgumentException("Invalid query parameters");
-//		}
-//	}
 
 }
