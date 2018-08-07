@@ -10,12 +10,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Queue;
 import java.util.Set;
-import java.util.Stack;
 import java.util.concurrent.ConcurrentHashMap;
-
 
 import com.raj.neustar.algo.Strategy;
 import com.raj.neustar.dto.ProductInfo;
@@ -180,9 +177,15 @@ public class InventoryRepositoryImpl implements InventoryRepository{
 		}
 		
 		if (node instanceof CategoryNode) {
-			node = getProductsByCatgory(categoryId).stream().max(
-					(pN1, pN2) -> (pN1.getPrice() - pN1.getSellingPrice()) > (pN2.getSellingPrice() - pN2.getPrice())
-							? 1 : -1).get();
+			node = getProductsByCatgory(categoryId).stream().max((pN1, pN2) -> {
+//System.out.println(pN1.getName()+ "" pN2.getName());				
+				if (pN1.getPrice() - pN1.getSellingPrice() == (pN2.getPrice()- pN2.getSellingPrice()))
+					return pN2.getId().compareTo(pN1.getId());
+				else if (pN1.getPrice() - pN1.getSellingPrice() > (pN2.getPrice()- pN2.getSellingPrice() ))
+					return 1;
+				else
+					return -1;
+			}).get();
 		}
 		ProductNode pNode = (ProductNode)node;
 		return new ProductInfo(pNode.getId(), pNode.getName(), pNode.getPrice(), pNode.getSellingPrice());
@@ -280,14 +283,6 @@ public class InventoryRepositoryImpl implements InventoryRepository{
 		public Boolean isLeafNode() {
 			return true;
 		}
-
-//		@Override
-//		public boolean applyStrategy() {
-//			Strategy<Double, Double> strategy;
-//			if ((strategy = getStrategy()) != null)
-//				sellingPrice = (Double) strategy.execute(getPrice());
-//			return true;
-//		}
 		
 		@Override
 		public boolean applyStrategy() {
@@ -309,13 +304,8 @@ public class InventoryRepositoryImpl implements InventoryRepository{
 		private Double calculateDiscount() {
 			Strategy<Double, Double> strategy;
 			Double discount = 0.0;
-			Node node = this;
-			
-			while (node != null) {
-				if ((strategy = node.getStrategy()) != null) {
-					discount = discount + getPrice() - (Double) strategy.execute(getPrice());
-				}
-				node = node.getParent();
+			if ((strategy = this.getStrategy()) != null) {
+				discount = getPrice() - (Double) strategy.execute(getSellingPrice());
 			}
 			return discount;
 		}
@@ -383,7 +373,11 @@ public class InventoryRepositoryImpl implements InventoryRepository{
 			}
 			final StatusHolder statusHolder = new StatusHolder();
 
-			getAllLeafNodes().forEachRemaining(node -> statusHolder.status = statusHolder.status && ((ProductNode) node).isValidDiscount());
+			getAllLeafNodes().forEachRemaining(node -> {
+				if (this.getStrategy()!= null)
+					node.setStrategy(this.getStrategy());
+				statusHolder.status = statusHolder.status && ((ProductNode) node).isValidDiscount();
+			});
 			if (statusHolder.status)
 				getAllLeafNodes().forEachRemaining(node -> statusHolder.status = statusHolder.status && node.applyStrategy());
 			return statusHolder.status;

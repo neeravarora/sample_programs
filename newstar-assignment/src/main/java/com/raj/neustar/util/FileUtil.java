@@ -25,8 +25,8 @@ public class FileUtil {
 			fr = new FileReader(file);
 			br = new BufferedReader(fr);
 			String line = br.readLine();
-			Integer numOfQuery = Utility.convert(line, Integer.class);
-			while (numOfQuery-- > 0 && (line = br.readLine()) != null) {
+			Integer numOfLines = Utility.convert(line, Integer.class);
+			while (numOfLines-- > 0 && (line = br.readLine()) != null) {
 				lineExecutor.exetute(line);
 			}
 
