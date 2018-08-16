@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.raj.neustar.algo.Strategy;
 import com.raj.neustar.dto.ProductInfo;
+import com.raj.neustar.util.FileUtil;
 import com.raj.neustar.util.Utility;
 
 /**
@@ -34,12 +35,8 @@ public class InventoryRepositoryImpl implements InventoryRepository{
 	
 	@Override
 	public void load(String file) {
-		FileReader fr = null;
-		BufferedReader br = null;
 
-		try {
-			fr = new FileReader(file);
-			br = new BufferedReader(fr);
+		FileUtil.readRaw(file, br -> {
 			String line = br.readLine();
 			Integer numOfNodes = Utility.convert(line, Integer.class);
 			while (numOfNodes-- > 0 && (line = br.readLine()) != null) {
@@ -66,7 +63,7 @@ public class InventoryRepositoryImpl implements InventoryRepository{
 					throw new IllegalArgumentException("Invalid Input Data");
 				Integer parentId = Utility.convert(tokens[0], Integer.class);
 				Integer childId = Utility.convert(tokens[1], Integer.class);
-				//System.out.println(parentId + " " + childId);
+				// System.out.println(parentId + " " + childId);
 				if (!nodeCache.containsKey(parentId) || !nodeCache.containsKey(childId))
 					throw new IllegalArgumentException("Invalid Input Data Id node doesn't exist");
 				else {
@@ -79,24 +76,8 @@ public class InventoryRepositoryImpl implements InventoryRepository{
 			root = nodeCache.get(1);
 			// Validate a cycle using if it is there then invalid data
 			validateCycle(root);
-
-		} catch (IOException e) {
-			System.out.println("File IO Exception" + e);
-		} finally {
-			try {
-				br.close();
-			} catch (IOException e) {
-				br = null;
-			}
-
-			try {
-				fr.close();
-			} catch (IOException e) {
-				fr = null;
-			}
-
-		}
-
+			return true;
+		});
 	}
 
 	/**

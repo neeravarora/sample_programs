@@ -19,6 +19,7 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 
+
 		InventoryRepository inventoryRepository = new InventoryRepositoryImpl();
 		QueryEngine queryEngine = new QueryEngine();
 		InventoryService inventoryService = new InventoryServiceImpl(inventoryRepository, queryEngine);
