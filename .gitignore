@@ -2,4 +2,6 @@
 *\.project
 *.zip
 *\*.zip
+*\bin
+
 
