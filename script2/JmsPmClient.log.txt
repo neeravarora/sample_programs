@@ -1,0 +1,16 @@
+2018-08-30_15:07:53.135-IST ERROR Exception: Need to specify class name in environment or system property, or in an application resource file: java.naming.factory.initial
+2018-08-30_15:07:53.148-IST ERROR Unable to connect to SAM, exiting
+2018-08-31_11:32:16.342-IST ERROR Exception: Need to specify class name in environment or system property, or in an application resource file: java.naming.factory.initial
+2018-08-31_11:32:16.355-IST ERROR Unable to connect to SAM, exiting
+2018-08-31_11:36:51.029-IST ERROR Exception: Failed to create remoting connection
+2018-08-31_11:36:51.035-IST ERROR Unable to connect to SAM, exiting
+2018-08-31_11:40:13.069-IST ERROR Unable to connect to SAM, exiting
+2018-08-31_12:15:40.385-IST INFO Connecting to SAM (primary 135.121.32.162, standby 5.196.16.162)
+2018-08-31_12:15:41.076-IST ERROR Exception: Failed to create remoting connection
+2018-08-31_12:15:41.076-IST ERROR Unable to connect to SAM, exiting
+2018-08-31_12:25:53.766-IST ERROR Unable to connect to SAM, exiting
+2018-08-31_12:27:12.444-IST ERROR Unable to connect to SAM, exiting
+2018-08-31_12:27:58.908-IST ERROR Unable to connect to SAM, exiting
+2018-08-31_12:28:43.833-IST ERROR Unable to connect to SAM, exiting
+2018-08-31_15:31:51.645-IST ERROR Exception: Need to specify class name in environment or system property, or in an application resource file: java.naming.factory.initial
+2018-08-31_15:31:51.655-IST ERROR Unable to connect to SAM, exiting
