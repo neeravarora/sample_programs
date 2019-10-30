@@ -1,0 +1,34 @@
+for i in `find ./experian_lu/ -name 'comp*'`; do echo $i; ri=`echo $i | cut -d '/' -f3`; fri="file_name=$ri"; echo $fri; cp $i ./experian_mango3/$fri; done
+
+for i in `find ./experian_lu/ -name 'comp*'`; do echo $i; ri=`echo $i | cut -d '/' -f3`; fri="file_name=$ri"; echo $fri;  done
+for i in `find ./experian_lu/ -name 'comp*'`; do  ri=`echo $i | cut -d '/' -f3`; fri="file_name=$ri"; echo $fri;  done
+
+
+
+ gunzip -c comp_experian_mango_3_2019_10_14_1571686823.csv.gz > ../dest/comp_experian_mango_3_2019_10_14_1571686823.csv
+ 
+ 
+ echo "comp_experian_mango_3_2019_10_14_1571686823.csv.gz"|sed 's/^\(.*\).gz$/\1/'
+ output >comp_experian_mango_3_2019_10_14_1571686823.csv
+ 
+ 
+  echo "comp_experian_mango_3_2019_10_14_1571686823.csv.gz"|sed 's/^comp_experian_mango_[0-9]\+_\(.*\).csv.gz$/\1/'
+   output >2019_10_14_1571686823
+   
+   echo "comp_experian_mango_3_2019_10_14_1571686823.csv.gz"|sed 's/^comp_experian_mango_[0-9]\+_\(.*\)_[0-9]\+.csv.gz$/\1/'
+   output >2019_10_14
+   
+    echo "comp_experian_mango_3_2019_10_14_1571686823.csv.gz"|sed 's/^[a-zA-Z_]\+_[0-9]\+_\(.*\)_[0-9]\+.csv.gz$/\1/'
+   output >2019_10_14
+   
+   echo $gzfilename |sed 's/^comp_experian_mango_[0-9]\+_\(.*\)_[0-9]\+.csv.gz$/\1/'
+   echo $gzfilename|sed 's/^\(.*\).gz$/\1/'
+   
+   
+    //gunzip -c -f $1 > ./experian_mango3/$dirname/$filename; $1 is relative path came through iteration doesn't work so use full_path by appending .gz file name// not working
+   for i in `find ./experian_lu/ -name 'comp*'`; do echo $i; gzfilename=`echo $i | cut -d '/' -f3`; dateval=`echo $gzfilename |sed 's/^comp_experian_mango_[0-9]\+_\(.*\)_[0-9]\+.csv.gz$/\1/'`; dirname="file_name=$dateval"; filename=`echo $gzfilename|sed 's/^\(.*\).gz$/\1/'`; echo $dirname; echo $filename; mkdir -p ./experian_mango3/$dirname; gunzip -c -f $1 > ./experian_mango3/$dirname/$filename;done  
+
+   //working
+   for i in `find ./experian_lu/ -name 'comp*'`; do echo $i; gzfilename=`echo $i | cut -d '/' -f3`; dateval=`echo $gzfilename |sed 's/^comp_experian_mango_[0-9]\+_\(.*\)_[0-9]\+.csv.gz$/\1/'`; dirname="file_name=$dateval"; filename=`echo $gzfilename|sed 's/^\(.*\).gz$/\1/'`; echo $dirname; echo $filename; mkdir -p ./experian_mango3/$dirname; gunzip -c -f /home/vbhargava/fb_v8.1/tmp/data_files/experian_lu/$gzfilename > ./experian_mango3/$dirname/$filename;done  
+
+   mkdir -p ./experian_mango3/$dir_name; gunzip -c $1 > ./experian_mango3/$dir_name/$file_name;

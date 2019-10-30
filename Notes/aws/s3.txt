@@ -1,0 +1,5 @@
+aws s3 ls s3://tivo-ftp/mango_3/experian/ --recursive --profile nightly
+
+aws s3 cp experian_lu s3://tv-mta/static/tmp/experian_raw/  --recursive --profile nightly
+
+aws s3 cp experian_mango3 s3://tv-mta/static/tmp/experian_mango3/  --recursive --profile nightly
