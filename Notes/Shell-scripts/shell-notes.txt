@@ -21,14 +21,98 @@ for i in `find ./experian_lu/ -name 'comp*'`; do  ri=`echo $i | cut -d '/' -f3`;
     echo "comp_experian_mango_3_2019_10_14_1571686823.csv.gz"|sed 's/^[a-zA-Z_]\+_[0-9]\+_\(.*\)_[0-9]\+.csv.gz$/\1/'
    output >2019_10_14
    
+   
+    echo "comp_experian_mango_3_2019_10_14_1571686823.csv.gz"|sed 's/^[a-zA-Z_]\+_[0-9]\+_\([0-9]\+\)_\([0-9]\+\)_\([0-9]\+\)_[0-9]\+.csv.gz$/\1\2\3/'
+   output >20191014
+   
    echo $gzfilename |sed 's/^comp_experian_mango_[0-9]\+_\(.*\)_[0-9]\+.csv.gz$/\1/'
    echo $gzfilename|sed 's/^\(.*\).gz$/\1/'
    
    
     //gunzip -c -f $1 > ./experian_mango3/$dirname/$filename; $1 is relative path came through iteration doesn't work so use full_path by appending .gz file name// not working
-   for i in `find ./experian_lu/ -name 'comp*'`; do echo $i; gzfilename=`echo $i | cut -d '/' -f3`; dateval=`echo $gzfilename |sed 's/^comp_experian_mango_[0-9]\+_\(.*\)_[0-9]\+.csv.gz$/\1/'`; dirname="file_name=$dateval"; filename=`echo $gzfilename|sed 's/^\(.*\).gz$/\1/'`; echo $dirname; echo $filename; mkdir -p ./experian_mango3/$dirname; gunzip -c -f $1 > ./experian_mango3/$dirname/$filename;done  
+   for i in `find ./experian_lu/ -name 'comp*'`; 
+   do 
+		echo $i; gzfilename=`echo $i | cut -d '/' -f3`; 
+		dateval=`echo $gzfilename |sed 's/^comp_experian_mango_[0-9]\+_\(.*\)_[0-9]\+.csv.gz$/\1/'`; 
+		dirname="file_name=$dateval"; filename=`echo $gzfilename|sed 's/^\(.*\).gz$/\1/'`; 
+		echo $dirname; echo $filename; 
+		mkdir -p ./experian_mango3/$dirname; 
+		gunzip -c -f $1 > ./experian_mango3/$dirname/$filename;
+   done
+   
 
    //working
-   for i in `find ./experian_lu/ -name 'comp*'`; do echo $i; gzfilename=`echo $i | cut -d '/' -f3`; dateval=`echo $gzfilename |sed 's/^comp_experian_mango_[0-9]\+_\(.*\)_[0-9]\+.csv.gz$/\1/'`; dirname="file_name=$dateval"; filename=`echo $gzfilename|sed 's/^\(.*\).gz$/\1/'`; echo $dirname; echo $filename; mkdir -p ./experian_mango3/$dirname; gunzip -c -f /home/vbhargava/fb_v8.1/tmp/data_files/experian_lu/$gzfilename > ./experian_mango3/$dirname/$filename;done  
+   for i in `find ./experian_lu/ -name 'comp*'`; 
+   do 
+		echo $i; 
+		gzfilename=`echo $i | cut -d '/' -f3`; 
+		dateval=`echo $gzfilename |sed 's/^comp_experian_mango_[0-9]\+_\(.*\)_[0-9]\+.csv.gz$/\1/'`; 
+		dirname="file_name=$dateval"; 
+		filename=`echo $gzfilename|sed 's/^\(.*\).gz$/\1/'`; 
+		echo $dirname; echo $filename; 
+		mkdir -p ./experian_mango3/$dirname; 
+		gunzip -c -f /home/vbhargava/fb_v8.1/tmp/data_files/experian_lu/$gzfilename > ./experian_mango3/$dirname/$filename;
+   done  
 
-   mkdir -p ./experian_mango3/$dir_name; gunzip -c $1 > ./experian_mango3/$dir_name/$file_name;
+   
+   
+   mkdir -p ./experian_mango3/$dir_name; 
+   gunzip -c $1 > ./experian_mango3/$dir_name/$file_name;
+   
+   
+   //working
+   for i in `find ./experian_lu/ -name 'comp*'`; 
+   do 
+	  echo $i; 
+	  gzfilename=`echo $i | cut -d '/' -f3`; 
+	  dateval=`echo $gzfilename |sed 's/^[a-zA-Z_]\+_[0-9]\+_\([0-9]\+\)_\([0-9]\+\)_\([0-9]\+\)_[0-9]\+.csv.gz$/\1\2\3/'`; 
+	  dirname="file_name=$dateval"; filename=`echo $gzfilename|sed 's/^\(.*\).gz$/\1/'`;
+	  echo $dirname; 
+	  echo $filename; 
+	  mkdir -p ./experian_mango3/$dirname; 
+	  gunzip -c -f /home/vbhargava/fb_v8.1/tmp/data_files/experian_lu/$gzfilename > ./experian_mango3/$dirname/$filename;
+    done  
+
+  
+   
+   
+   for i in `find ./experian_lu/ -name 'comp*'`; 
+   do echo $i; gzfilename=`echo $i | cut -d '/' -f3`; 
+	   dateval=`echo $gzfilename |sed 's/^[a-zA-Z_]\+_[0-9]\+_\([0-9]\+\)_\([0-9]\+\)_\([0-9]\+\)_[0-9]\+.csv.gz$/\1\2\3/'`; 
+	   echo $dateval;
+   done
+   
+   
+   
+   
+   for i in `find ./experian_lu/ -name 'comp*'`; 
+   do 
+	   echo $i; 
+	   gzfilename=`echo $i | cut -d '/' -f3`; 
+	   dateval=`echo $gzfilename |sed 's/^[a-zA-Z_]\+_[0-9]\+_\([0-9]\+\)_\([0-9]\+\)_\([0-9]\+\)_[0-9]\+.csv.gz$/\1\2\3/'`; 
+	   dirname="file_name=$dateval"; 
+	   filename=`echo $gzfilename|sed 's/^\(.*\).gz$/\1/'`; 
+	   echo $dirname; 
+	   echo $filename; 
+	   
+   done
+   
+   
+   --------------------------------
+   #\1 and \2 representing extracted group in a same order it marked in regex by open and closed brackets(pattern) 
+   echo "This is the file.txt from my folder." | sed "s/^This is the \(.*\) from my folder.$/\1/"
+   output >is
+   
+   echo "This is the file.txt from my folder." | sed "s/^This is the \(.*\) from my folder.$/\2/"
+   output >file.txt
+   
+   
+   echo "This is the file.txt from my folder." | sed "s/^This \(.*\) the \(.*\) from my folder.$/\2_\1/"
+   output >file.txt_is
+   
+   echo "This is the file.txt from my folder." | sed "s/^This \(.*\) the \(.*\) from my folder.$/\2   \1/"
+   output >file.txt   is
+   
+   # \\ is escape char to print '\' like \\\ and to print '/' \\/
+   echo "This is the file.txt from my folder." | sed "s/^This \(.*\) the \(.*\) from my folder.$/\2  \\\ \1/"
+   output >file.txt  \ is
