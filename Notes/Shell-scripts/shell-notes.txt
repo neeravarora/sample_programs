@@ -25,6 +25,13 @@ for i in `find ./experian_lu/ -name 'comp*'`; do  ri=`echo $i | cut -d '/' -f3`;
     echo "comp_experian_mango_3_2019_10_14_1571686823.csv.gz"|sed 's/^[a-zA-Z_]\+_[0-9]\+_\([0-9]\+\)_\([0-9]\+\)_\([0-9]\+\)_[0-9]\+.csv.gz$/\1\2\3/'
    output >20191014
    
+    echo "file_name=comp_event_mango_3_2019_10_30_1573069152/"|sed 's/^file_name=[a-zA-Z_]\+_[0-9]\+_\([0-9]\+\)_\([0-9]\+\)_\([0-9]\+\)_[0-9]\+\/$/\1\2\3/'
+	output>20191030
+	
+	// for tivo log
+	echo "file_name=comp_event_mango_3_2019_10_30_1573069152/"|sed 's/^\(file_name=\)[a-zA-Z_]\+_[0-9]\+_\([0-9]\+\)_\([0-9]\+\)_\([0-9]\+\)_[0-9]\+\/$/\1\2\3\4/'
+	output>file_name=20191030
+   
    echo $gzfilename |sed 's/^comp_experian_mango_[0-9]\+_\(.*\)_[0-9]\+.csv.gz$/\1/'
    echo $gzfilename|sed 's/^\(.*\).gz$/\1/'
    
@@ -116,3 +123,10 @@ for i in `find ./experian_lu/ -name 'comp*'`; do  ri=`echo $i | cut -d '/' -f3`;
    # \\ is escape char to print '\' like \\\ and to print '/' \\/
    echo "This is the file.txt from my folder." | sed "s/^This \(.*\) the \(.*\) from my folder.$/\2  \\\ \1/"
    output >file.txt  \ is
+   
+   
+   
+   
+   ========================================================
+   for i in $a; do ri=`echo $i | grep file_name`; dateval=`echo $ri |sed 's/^\(file_name=\)[a-zA-Z_]\+_[0-9]\+_\([0-9]\+\)_\([0-9]\+\)_\([0-9]\+\)_[0-9]\+\/$/\1\2\3\4/'`;echo $dateval; done
+

@@ -5,3 +5,13 @@ aws s3 cp experian_lu s3://tv-mta/static/tmp/experian_raw/  --recursive --profil
 aws s3 cp experian_mango3 s3://tv-mta/static/tmp/experian_mango3/  --recursive --profile nightly
 
 aws s3 rm s3://tv-mta/static/tmp/experian_mango3/  --recursive --profile nightly
+
+
+
+
+
+aws s3 ls s3://platform-outbound/prod/v3-field-statistics/v1/2019/11/14/ --recursive | awk '{if ($3 > 0) print $NF}' | sed "s/prod\/v3-field-statistics\/v1\/2019\/11\///
+aws s3 ls s3://platform-outbound/prod/v3-field-statistics/v1/2019/11/14/ --recursive | awk '{if ($3 > 0) print $NF}'  | cut -d'/' -f4-
+aws s3 ls s3://platform-outbound/prod/v3-field-statistics/v1/2019/11/14/ --recursive | awk '{if ($3 > 0) print $NF}'  | cut -d'/' -f4-6
+
+aws s3 ls s3://platform-outbound/prod/v3-field-statistics/v1/2019/11/14/ --recursive | awk '{print $NF}'  | rev | cut -d '/' -f2- | rev | cut -d '/' -f3- | sort | uniq
