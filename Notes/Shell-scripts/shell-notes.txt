@@ -128,5 +128,29 @@ for i in `find ./experian_lu/ -name 'comp*'`; do  ri=`echo $i | cut -d '/' -f3`;
    
    
    ========================================================
+   >aws s3 ls s3://tv-mta/tivo/channel-change/weekly/ --recursive --profile nightly| awk '{print $NF}' 
+   >aws s3 ls s3://tv-mta/tivo/channel-change/weekly/ --recursive --profile nightly| awk '{print $NF}' |more
+   >aws s3 ls s3://tv-mta/tivo/channel-change/weekly/ --recursive --profile nightly| awk '{print $NF}' | rev | cut -d '/' -f3- | rev | cut -d '/' -f3- | sort | uniq
+   >aws s3 ls s3://tv-mta/tivo/channel-change/weekly/ --recursive --profile nightly| awk '{print $NF}' | rev | cut -d '/' -f2- | rev | cut -d '/' -f2- | sort | uniq
+
+   
+   
+   
+   >  a=`aws s3 ls s3://tv-mta/tivo/channel-change/weekly/ --profile nightly`
+   >  a=`aws s3 ls s3://tv-mta/tivo/channel-change/weekly/ --profile nightly|awk '{print $NF}'`
+
+   
    for i in $a; do ri=`echo $i | grep file_name`; dateval=`echo $ri |sed 's/^\(file_name=\)[a-zA-Z_]\+_[0-9]\+_\([0-9]\+\)_\([0-9]\+\)_\([0-9]\+\)_[0-9]\+\/$/\1\2\3\4/'`;echo $dateval; done
 
+for i in $a; do ri=`echo $i | grep file_name`; dateval=`echo $ri |sed 's/^\(file_name=\)[a-zA-Z_]\+_[0-9]\+_\([0-9]\+\)_\([0-9]\+\)_\([0-9]\+\)_[0-9]\+\/$/\1\2\3\4/'`;if[! -n "$dateval"] then; echo '' else; echo $dateval; done
+
+for i in $a; do ri=`echo $i | grep file_name`; dateval=`echo $ri |sed 's/^\(file_name=\)[a-zA-Z_]\+_[0-9]\+_\([0-9]\+\)_\([0-9]\+\)_\([0-9]\+\)_[0-9]\+\/$/\1\2\3\4/'`;echo "aws s3 cp s3://tv-mta/tivo/channel-change/weekly/$ri s3://tv-mta/static/tmp/tivo_raw/$dateval/ --recursive --profile nightly"; done
+
+for i in $a; do ri=`echo $i | grep file_name`; dateval=`echo $ri |sed 's/^\(file_name=\)[a-zA-Z_]\+_[0-9]\+_\([0-9]\+\)_\([0-9]\+\)_\([0-9]\+\)_[0-9]\+\/$/\1\2\3\4/'`;echo "aws s3 cp s3://tv-mta/tivo/channel-change/weekly/$ri s3://tv-mta/static/tmp/tivo_raw/$dateval/ --recursive --profile nightly"; done > output.txt
+
+for i in $a; do ri=`echo $i | grep file_name=comp`; dateval=`echo $ri |sed 's/^\(file_name=\)[a-zA-Z_]\+_[0-9]\+_\([0-9]\+\)_\([0-9]\+\)_\([0-9]\+\)_[0-9]\+\/$/\1\2\3\4/'`;echo "aws s3 cp s3://tv-mta/tivo/channel-change/weekly/$ri s3://tv-mta/static/tmp/tivo_raw/$dateval/ --recursive --profile nightly"; done > o2.txt
+
+
+
+#// Filter all comp* files
+for i in $a; do ri=`echo $i | grep file_name=comp`; echo $ri ;  done |more

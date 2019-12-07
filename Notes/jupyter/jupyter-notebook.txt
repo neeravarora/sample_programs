@@ -1,0 +1,39 @@
+Utils and commands
+
+// jupyter notebook run in remote location
+>unset XDG_RUNTIME_DIR
+
+// to create an env
+> ../anaconda3/bin/conda env create -f ../fb_mta/environment.yml  --prefix /home/vbhargava/raj_fb/anaconda3/envs/fb_mta
+
+// to enable conda env in jupyter notebook
+> ./conda install nb_conda
+
+
+ //to enable conda fb_mta env in jupyter notebook
+>vbhargava@ip-10-0-0-58:~/raj_fb/anaconda3/bin$source activate fb_mta
+>(fb_mta) vbhargava@ip-10-0-0-58:~/raj_fb/anaconda3/bin$ ./conda install nb_conda
+
+
+
+//jupyter remotely enabled and accessible-
+
+     Have you configured the jupyter_notebook_config.py file to allow external connections?
+
+    By default, Jupyter Notebook only accepts connections from localhost (eg, from the same computer that its        
+    running on). By modifying the NotebookApp.allow_origin option from the default ' ' to '*', you allow Jupyter 
+    to be accessed externally.
+
+    c.NotebookApp.allow_origin = '*' #allow all origins
+
+    You'll also need to change the IPs that the notebook will listen on:
+
+    c.NotebookApp.ip = '0.0.0.0' # listen on all IPs
+
+// Start Jupyter server on remote server 
+
+  If you are facing OSError: [Errno 13] Permission denied: '/run/user/1000/jupyter' 
+  then export XDG_RUNTIME_DIR
+>export XDG_RUNTIME_DIR=""
+
+anaconda/bin>jupyter notebook --port 5001     
