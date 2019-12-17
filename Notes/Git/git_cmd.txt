@@ -1,0 +1,7 @@
+> git clone https://scmuser:RRFSKqQfd44eBm2bzg69@git.nexgen.neustar.biz:8443/marketshare/360Digital/msaction_backend.git
+
+> git remote show origin
+
+> git config --get remote.origin.url
+
+
