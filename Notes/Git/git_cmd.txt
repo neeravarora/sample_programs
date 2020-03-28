@@ -4,4 +4,7 @@
 
 > git config --get remote.origin.url
 
+# Ignoring files permission changes
+> git -c core.fileMode=false status
+
 
