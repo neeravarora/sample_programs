@@ -1,0 +1,23 @@
+Linux commands
+
+$ find . -type d -name '.settings' -exec rm -r {} \;
+
+$ find . -type f -name '.settings' -exec rm -r {} \;
+
+$find . -type f -perm 0777 -exec chmod 644 {}\;
+
+$find ./ -name  '*mem*100.csv' -exec cp {} ../filtered/membership/ \;
+
+$ find $(pwd)/ -type f
+
+$ echo $(pwd)/$line
+
+
+
+
+find ./ -type f -name '*.sw*' -exec rm -r {} +
+
+find ./ -type f -name '*.sw*' 
+
+To enable mouse in VI
+:set mouse=a
