@@ -1,0 +1,10 @@
+
+//'123', '123 ', '456', '678 ' these are list of values
+
+SELECT distinct trim(ultimate_owner_id) as ultimate_owner_id FROM (SELECT array('123', '123 ', '456', '678 ') as ultimate_owner_id_list ) uoids
+LATERAL VIEW explode(uoids.ultimate_owner_id_list) myTable AS ultimate_owner_id;
+
+
+
+SELECT myCol1, col2 FROM baseTable
+LATERAL VIEW explode(col1) myTable1 AS myCol1;
