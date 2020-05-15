@@ -15,3 +15,36 @@ aws s3 ls s3://platform-outbound/prod/v3-field-statistics/v1/2019/11/14/ --recur
 aws s3 ls s3://platform-outbound/prod/v3-field-statistics/v1/2019/11/14/ --recursive | awk '{if ($3 > 0) print $NF}'  | cut -d'/' -f4-6
 
 aws s3 ls s3://platform-outbound/prod/v3-field-statistics/v1/2019/11/14/ --recursive | awk '{print $NF}'  | rev | cut -d '/' -f2- | rev | cut -d '/' -f3- | sort | uniq
+
+
+
+
+////filter rows where last field has substring with '_tmp.'
+aws s3 ls s3://tv-mta/tv-results-prod/  | awk '/_tmp./{print $NF}'
+
+////filter rows where last field has suffix with '-orc/'.
+aws s3 ls s3://tv-mta/tv-results-prod/  | awk '$NF~/^.*-orc\/$/{print $NF}'
+//another way
+aws s3 ls s3://tv-mta/tv-results-prod/  | awk '{ if ($NF ~ /^.*-orc\/$/) print $NF}'
+
+
+
+////filter rows where 6th column matches regex.
+>awk '{ if($6 == '/[1-100][S|M][1-100][S|M]/')print}' file.txt
+
+
+//// echo by adding prefix 'abc ' and suffix '/' in filtered rows based on '_tmp.' prefix
+aws s3 ls s3://tv-mta/tv-results-prod/  | awk '/^_tmp./{print $NF}' | awk '{system("echo abc "$1"/" )}'
+
+//// echo by adding prefix 'abc ' and suffix '/' in filtered rows based on '-orc/' suffix
+aws s3 ls s3://tv-mta/tv-results-prod/  | awk '{ if ($NF ~ /^.*-orc\/$/) print $NF}' | awk '{system("echo abc "$1 )}'
+
+////deleting files in aws s3 based on pattern here it is _temp. substring
+aws s3 ls s3://tv-mta/tv-results-prod/  | awk '/_tmp./{print $NF}' | awk '{system("aws s3 rm  --recursive --dryrun s3://tv-mta/tv-results-prod/"$1 )}'
+
+////deleting files in aws s3 based on pattern here it is '/^.*-orc\/$' regex
+aws s3 ls s3://tv-mta/tv-results-prod/  | awk '{ if ($NF ~ /^.*-orc\/$/) print $NF}' | awk '{system("aws s3 rm  --recursive --dryrun s3://tv-mta/tv-results-prod/"$1 )}'
+
+
+
+

@@ -7,4 +7,10 @@
 # Ignoring files permission changes
 > git -c core.fileMode=false status
 
+# Merge commit revert (It will create a commit with reverse changes)
+> git revert -m 1 <SHA for merge commit>
+
+# Checkout branch (Reset the branch merge)
+> git checkout branch_name
+
 
