@@ -6,6 +6,21 @@ aws s3 cp experian_mango3 s3://tv-mta/static/tmp/experian_mango3/  --recursive -
 
 aws s3 rm s3://tv-mta/static/tmp/experian_mango3/  --recursive --profile nightly
 
+# To view a file from s3 location
+aws s3 cp  s3://tv-mta/tv-results-prod/states/state/state.json - |more
+
+# To upload (copy all the content) from ./ (current dir) to s3://tv-mta/tv-results-prod/states/state/
+aws s3 sync ./ s3://tv-mta/tv-results-prod/states/state/
+
+# To download (copy all the content) from s3://tv-mta/tv-results-prod/states/state/ to ./ (current dir)
+aws s3 sync s3://tv-mta/tv-results-prod/states/state/ ./
+
+
+# Results by skipping last 3 lines 
+aws s3 ls s3://tv-mta/tv-results-prod/mta-tv-impressions/ultimateowner_id=3083225/ --recursive --human-readable --summarize | head -n -3
+
+
+
 
 
 
@@ -45,6 +60,14 @@ aws s3 ls s3://tv-mta/tv-results-prod/  | awk '/_tmp./{print $NF}' | awk '{syste
 ////deleting files in aws s3 based on pattern here it is '/^.*-orc\/$' regex
 aws s3 ls s3://tv-mta/tv-results-prod/  | awk '{ if ($NF ~ /^.*-orc\/$/) print $NF}' | awk '{system("aws s3 rm  --recursive --dryrun s3://tv-mta/tv-results-prod/"$1 )}'
 
+////deleting files in aws s3 based on pattern here it is '/^.*-bak\/$' regex
+aws s3 ls s3://tv-mta/tv-results-prod/  | awk '{ if ($NF ~ /^.*-bak\/$/) print $NF}' | awk '{system("aws s3 rm  --recursive --dryrun s3://tv-mta/tv-results-prod/"$1 )}'
 
+//// TO verify impression_date
+ aws s3 ls --recursive s3://tv-mta/tv-results-prod/mta-tv-impressions/  | awk '{ if ($NF ~ /^.*impression_date=2019-08-12/) print $NF}'
+
+
+//// TO verify ultimateowner_id
+ aws s3 ls --recursive s3://tv-mta/tv-results-prod/mta-tv-impressions/  | awk '{ if ($NF ~ /^.*ultimateowner_id=1395292/) print $NF}'
 
 
