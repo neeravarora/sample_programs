@@ -1,0 +1,72 @@
+awk '{if ($3 > 0) print $3 " " $NF}' tv_imp_stat.txt |  awk  '{sum+=$1}END{print sum}'
+
+
+awk '{if ($3 > 0) print $3 " " $NF}' tv_imp_stat.txt |  awk  '{sum+=$1}END{printf "%.f\n", sum}'
+
+// Total sum
+ head -n 83765 tv_imp_stat.txt | awk '{if ($3 > 0) print $3 " "$4" " $NF}' |  awk  '{ if($2 =="MiB") sum+=$1*1024; else sum+=$1}END{printf "%.f\n", sum}'
+ 
+ head -n 83765 tv_imp_stat.txt | awk '{if ($3 > 0) print $3 " "$4" " $NF}' |  awk  '{ if($2 =="GiB") sum+=$1*1024*1024; else if($2 =="MiB") sum+=$1*1024; else sum+=$1}END{printf "%.f\n", sum/(1024*1024)}'
+
+head -n 83765 tv_imp_stat.txt | awk '{if ($3 > 0) print $3 " "$4" " $NF}' |  awk  '{ if($2 =="GiB") sum+=$1*1024*1024*1024; else if($2 =="MiB") sum+=$1*1024*1024; else if($2 =="KiB") sum+=$1*1024; else sum+=$1 }END{printf "%.f\n", sum/(1024*1024*1024)}'
+ 
+head -n -3 tv_imp_stat.txt | awk '{if ($3 > 0) print $3 " "$4" " $NF}' |  awk  '{ if($2 =="GiB") sum+=$1*1024*1024*1024; else if($2 =="MiB") sum+=$1*1024*1024; else if($2 =="KiB") sum+=$1*1024; else sum+=$1 }END{printf "%.f\n", sum/(1024*1024*1024)}'
+
+
+ 
+ awk -F, '{a[$1]+=$2;}END{for(i in a)print i", "a[i];}' file
+Item1, 800
+Item2, 1300
+Item3, 900
+
+
+
+$ awk -F"," '{x+=$2;print}END{print "Total,"x}' file
+Item1,200
+Item2,500
+Item3,900
+Item2,800
+Item1,600
+Total,3000
+
+
+
+$ awk -F, '{if (a[$1] < $2)a[$1]=$2;}END{for(i in a){print i,a[i];}}' OFS=, file
+Item1,600
+Item2,800
+Item3,900
+
+
+
+echo "27.0 MiB tv-results-prod/mta-tv-impressions/ultimateowner_id=3083225/impression_date=2020-02-16/64e2a96663e44d23ab9e49a7d6446291_000023" | sed 's/^.*\(ultimateowner_id=[0-9]\+\)\/.*$/\1/'
+
+echo "27.0 MiB tv-results-prod/mta-tv-impressions/ultimateowner_id=3083225/impression_date=2020-02-16/64e2a96663e44d23ab9e49a7d6446291_000023"|sed 's/^\(.*\)tv-results-prod.*\(ultimateowner_id=[0-9]*\)\/.*$/\1\2/'
+out=  27.0 MiB ultimateowner_id=3083225
+
+echo "27.0 MiB tv-results-prod/mta-tv-impressions/ultimateowner_id=3083225/impression_date=2020-02-16/64e2a96663e44d23ab9e49a7d6446291_000023"|sed 's/^\(.*\)tv-results-prod.*\(ultimateowner_id=[0-9]*\)\/.*$/\2 \1/'
+out= ultimateowner_id=3083225 27.0 MiB
+
+ echo "27.0 MiB tv-results-prod/mta-tv-impressions/ultimateowner_id=3083225/impression_date=2020-02-16/64e2a96663e44d23ab9e49a7d6446291_000023"|sed 's/^\(.*\)tv-results-prod.*\(ultimateowner_id=[0-9]*\)\/.*$/\2 -  \1/'
+out= ultimateowner_id=3083225 -  27.0 MiB
+
+
+
+head -n -3 tv_imp_stat.txt | awk '{if ($3 > 0) print $3 " "$4" " $NF}' | sed 's/^.*\(ultimateowner_id=[0-9]\+\)\/.*$/\1/'
+
+
+head -n -3 tv_imp_stat.txt | awk '{if ($3 > 0) print $3 " "$4" " $NF}' | sed 's/^\(.*\)tv-results-prod.*\(ultimateowner_id=[0-9]*\)\/.*$/\2 \1/'
+
+
+
+head -n -3 tv_imp_stat.txt | awk '{if ($3 > 0) print $3 " "$4" " $NF}' | sed 's/^\(.*\)tv-results-prod.*\(ultimateowner_id=[0-9]*\)\/.*$/\2 \1/' | awk -F, '{if($3 =="GiB") a[$1]+=$2*1024*1024*1024; else if($3 =="MiB") a[$1]+=$2*1024*1024; else if($3 =="KiB") a[$1]+=$2*1024; else a[$1]+=$2;}END{for(i in a)print i", "a[i];}'
+
+head -n -3 tv_imp_stat.txt | awk '{if ($3 > 0) print $3 " "$4" " $NF}' | sed 's/^\(.*\)tv-results-prod.*\(ultimateowner_id=[0-9]*\)\/.*$/\2 \1/' | awk  '{if($3 =="GiB") a[$1]+=$2*1024*1024*1024; else if($3 =="MiB") a[$1]+=$2*1024*1024; else if($3 =="KiB") a[$1]+=$2*1024; else a[$1]+=$2;}END{for(i in a)print i", "a[i];}'
+
+// Working solution
+head -n -3 tv_imp_stat.txt | awk '{if ($3 > 0) print $3 " "$4" " $NF}' | sed 's/^\(.*\)tv-results-prod.*\(ultimateowner_id=[0-9]*\)\/.*$/\2 \1/' | awk  '{if($3 =="GiB") a[$1]+=$2*1024*1024*1024; else if($3 =="MiB") a[$1]+=$2*1024*1024; else if($3 =="KiB") a[$1]+=$2*1024; else a[$1]+=$2;}END{for(i in a){printf i" "; printf "%.f", a[i]/(1024*1024); print " MiB"};}'
+
+//Sorted desending order
+head -n -3 tv_imp_stat.txt | awk '{if ($3 > 0) print $3 " "$4" " $NF}' | sed 's/^\(.*\)tv-results-prod.*\(ultimateowner_id=[0-9]*\)\/.*$/\2 \1/' | awk  '{if($3 =="GiB") a[$1]+=$2*1024*1024*1024; else if($3 =="MiB") a[$1]+=$2*1024*1024; else if($3 =="KiB") a[$1]+=$2*1024; else a[$1]+=$2;}END{for(i in a){printf i" "; printf "%.f", a[i]/(1024*1024); print " MiB"};}' | sort -nrk2
+
+// group by ultimateowner_id and order by size
+aws s3 ls s3://tv-mta/tv-results-prod/mta-tv-impressions/ --recursive --human-readable | awk '{if ($3 > 0) print $3 " "$4" " $NF}' | sed 's/^\(.*\)tv-results-prod.*\(ultimateowner_id=[0-9]*\)\/.*$/\2 \1/' | awk  '{if($3 =="GiB") a[$1]+=$2*1024*1024*1024; else if($3 =="MiB") a[$1]+=$2*1024*1024; else if($3 =="KiB") a[$1]+=$2*1024; else a[$1]+=$2;}END{for(i in a){printf i" "; printf "%.f", a[i]/(1024*1024); print " MiB"};}' | sort -nrk2 > ~/tv_imp_stat3.txt
