@@ -38,6 +38,8 @@ aws s3 ls s3://platform-outbound/prod/v3-field-statistics/v1/2019/11/14/ --recur
 aws s3 ls s3://tv-mta/tv-results-prod/  | awk '/_tmp./{print $NF}'
 
 ////filter rows where last field has suffix with '-orc/'.
+aws s3 ls s3://tv-mta/tv-results-prod/  | awk '/-orc\/$/{print $NF}'
+
 aws s3 ls s3://tv-mta/tv-results-prod/  | awk '$NF~/^.*-orc\/$/{print $NF}'
 //another way
 aws s3 ls s3://tv-mta/tv-results-prod/  | awk '{ if ($NF ~ /^.*-orc\/$/) print $NF}'
