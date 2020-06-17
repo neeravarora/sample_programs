@@ -1,0 +1,3 @@
+
+// Resizing terminal or screen after changing resolution
+>resize
