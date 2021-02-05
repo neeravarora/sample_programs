@@ -12,20 +12,20 @@ public class Main {
 	public static void main(String[] args) throws InterruptedException {
 		// Integer [] arr = new Integer [3];
 		// System.out.println("hi");
-		 Map<Integer, Integer> map = new HashMap<>();
-		 System.out.println(map.keySet());
-		 map.put(1, null);
-		
-
-		 System.out.println("hi"+map.size());
-		 map.remove(1);
-		 System.out.println("hi"+map.size());
-		 map.put(2, null);
+//		 Map<Integer, Integer> map = new HashMap<>();
+//		 System.out.println(map.keySet());
+//		 map.put(1, null);
+//		
+//
+//		 System.out.println("hi"+map.size());
+//		 map.remove(1);
+//		 System.out.println("hi"+map.size());
+//		 map.put(2, null);
 
 //		notify1();
-//		t3.start();
-//		t1.start();
-//		t2.start();
+		t3.start();
+		t1.start();
+		t2.start();
 
 	}
 

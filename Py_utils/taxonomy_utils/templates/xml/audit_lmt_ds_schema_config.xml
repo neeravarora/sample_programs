@@ -1,0 +1,90 @@
+<configroot version="{{dn_version}}">
+	<set>
+		<name>CS_TAXONOMY_LMT_SCHEMA_SET</name>
+        {% for tg in create_tg_schema_obj_list %}
+		<elements>
+			<subsource_name>
+				<!-- name of the subsource, has to be unique across all datasource -->
+				<val>{{tg.tg_name}}</val>
+			</subsource_name>
+			<key-columns>
+                {% for key in tg.key_cols %}
+				<attr datatype="STRING">{{key}}</attr>
+                {% endfor %}
+			</key-columns>
+			<target-columns>
+                {% for target in tg.target_cols %}
+				<attr datatype="STRING">{{target}}</attr>
+                {% endfor %}
+			</target-columns>
+			<partitionby_columns>
+			</partitionby_columns>
+			<row_delimiter>
+				<!-- Row separator -->
+				<val>'\n'</val>
+			</row_delimiter>
+			<column_delimiter>
+				<!-- Column separator -->
+				<val>','</val>
+			</column_delimiter>
+			<serde>
+				<val>'org.apache.hadoop.hive.serde2.OpenCSVSerde'</val>
+			</serde>
+			<serde_properties>
+				<val/>
+			</serde_properties>
+			<table_properties>
+				<val/>
+			</table_properties>
+			<storage_type>
+				<!-- Storage or compression type of files, ex: TEXTFILE, ORC, PARQUET -->
+				<val>TEXTFILE</val>
+			</storage_type>
+			<location>
+				<val>{{tg.location}}/</val>
+			</location>
+		</elements>
+        {% endfor %}
+    </set>
+   
+    
+    <set>
+		<name>DROP_CS_TAXONOMY_LMT_SCHEMA_SET</name>
+        {% for tg in drop_tg_schema_obj_list %}
+		<elements>
+			<subsource_name>
+				<!-- name of the subsource, has to be unique across all datasource -->
+				<val>{{tg.tg_name}}</val>
+			</subsource_name>
+			<key-columns>
+                {% for key in tg.key_cols %}
+				<attr>{{key}}</attr>
+                {% endfor %}
+			</key-columns>
+			<target-columns>
+                {% for target in tg.target_cols %}
+				<attr>{{target}}</attr>
+                {% endfor %}
+			</target-columns>
+		</elements>
+        {% endfor %}
+    </set>
+    
+   <set>
+		<name>CS_TAXONOMY_GROUP_ORDERED_SET</name>
+        {% for tg_name in exposed_tg_name_ordered_list %}
+		<elements>
+			<subsource_name>
+				<!-- name of the subsource, has to be unique across all datasource -->
+				<val>{{tg_name}}</val>
+			</subsource_name>
+
+			<precedence_order>              
+				<val>{{loop.index}}</val>
+			</precedence_order>
+
+		</elements>
+        {% endfor %}
+    </set>
+    
+</configroot>

@@ -1,0 +1,46 @@
+<html>
+                <head>
+                </head>
+                <body>
+				{% if START_DATE is not none and END_DATE is not none %}
+					<h1 style="font-size: 30px;color: white;background-color:rgb(241, 53, 20);text-align: center;border:40px solid rgb(241, 53, 20);">TV MTA ETL Run has failed which has started on {{TRIGGER_START_DATE}} <i>(timestamp: {{START_TIMESTAMP}})</i> for time interval {{START_DATE}} and {{END_DATE}}</h1>
+				{% endif %}
+				{% if START_DATE is none or END_DATE is none %}
+					<h1 style="font-size: 30px;color: white;background-color:rgb(241, 53, 20);text-align: center;border:40px solid rgb(241, 53, 20);">TV MTA ETL Run has failed which has started on {{TRIGGER_START_DATE}} <i>(timestamp: {{START_TIMESTAMP}})</i></h1>
+				{% endif %}
+
+				{% if RECURSIVE_TIMESTAMP is not none and RECURSIVE_TRIGGER_NUM is not none and (FINAL_START_DATE is none or  FINAL_END_DATE is none) %}
+					<p1><B>Recursive trigger #{{RECURSIVE_TRIGGER_NUM}}:</B> started on {{RECURSIVE_START_DATE}} <i>(timestamp: {{RECURSIVE_TIMESTAMP}})</i>.</p1>
+				{% endif %}
+                
+				{% if RECURSIVE_TRIGGER_NUM is not none and FINAL_START_DATE is not none and FINAL_END_DATE is not none and logs_loc is not none%}
+					<p2><B>Recursive trigger #{{RECURSIVE_TRIGGER_NUM}}:</B> started on {{RECURSIVE_START_DATE}} <i>(timestamp: {{RECURSIVE_TIMESTAMP}})</i> for impression data processing from {{FINAL_START_DATE}} to {{FINAL_END_DATE}} is Failed.
+                <br>
+                <br>
+                {% endif %}
+                <br> 
+                <br>
+                {% if logs_loc is not none %}
+                Further details and logs are available at: <i>{{logs_loc}}</i></p2>
+				{% endif %}
+
+				{% if logs_loc is none %}
+					<p3>Please find the details and logs, in TV_ETL staging location of appropriate server based on given timestamps in header (started on)</p3>
+				{% endif %}
+                <br>
+                <br>
+				{% if DESCRIPTION is not none %}
+                <p4><B>Description</B> : {{DESCRIPTION}}</p4>
+                <br>
+                <br>
+				{% endif %}
+                
+				{% if STACK_TRACE is not none %}
+					<br>
+                    <br>
+					<p5><B>Stack Trace:</B><br> 
+                        <hr style="height: 10px; background-color: black; margin-bottom: 10px;">
+                        {{STACK_TRACE}}</p5>
+				{% endif %}
+                </body>
+                </html>

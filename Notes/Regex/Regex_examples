@@ -1,0 +1,5 @@
+
+
+//Finding one or two digits succeeding with 2 whitesapaces. exam: 1  ,2  ,12  ,67  ,
+
+[0-9]{1,2}(\s){2}

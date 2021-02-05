@@ -1,0 +1,11 @@
+{
+    "cluster" : "TV-MTA-Dnow",
+    "s3_location" : "s3://qubole-tvmta/warehouse/",
+    "access_key" : "AKIAV7ASTURNGMRRY7TC",
+    "secret_key" : "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",
+    "token" : "26d1022d7edc4194b168d0a0077f22846c1d74f7cadf4e59850a086f8e6b03b9",
+    "url" : "https://api.qubole.com/api",
+    "region" :"us-east-1",
+    "JARLOCATION" : "s3://qubole-tvmta/warehouse/jars"
+}
+  

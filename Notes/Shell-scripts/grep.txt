@@ -1,0 +1,5 @@
+///// replacing words in nexted files
+grep -rl oldtext . | xargs sed -i 's/oldtext/newtext/g'
+
+//// replacing words in selected files by find cmd
+find <mydir> -type f -exec sed -i 's/<string1>/<string2>/g' {} +

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configroot version="7.4">
+ <set>
+   <name>PLATFORM</name>
+   <stringval>qubole</stringval>
+ </set>
+ <qubole_settings>
+    <set>
+       <name>qds_cmd</name>
+       <stringval>/usr/local/bin/qds.py</stringval>
+    </set>
+    
+    <set>
+      <name>s3cmd</name>
+      <stringval>/usr/local/bin/s3cmd</stringval>
+    </set>
+    
+    <set>
+      <!-- The nomenclature of S3_LOCATION should be :  s3://<bucketname>/warehouse/ -->
+      <name>s3_location</name>
+      
+      <stringval>s3://qubole-nightly/warehouse/qa_nightly_1</stringval>
+    </set>
+    
+    <set>
+      <!-- URL corresponding to US (https://api.qubole.com/api) or EU us-east-1 (https://eu-central-1.qubole.com/api) -->
+      <name>url</name>
+      <stringval>https://api.qubole.com/api</stringval>
+    </set>
+    
+    <set>
+       <!-- This is the account ID and this should be corresponding to username "dataops_qubole_us@team.neustar" for US us-east-1s and "dataops_qubole_eu@team.neustar" for EU us-east-1 -->
+      <name>token</name>
+      <stringval>1bc2eb4362674f929ba1a66e8eed0a93d1b4d0f266e84c6b87bd915eb29ceaa1</stringval>
+    </set>
+    
+    <set>
+       <!-- Cluster name corresponding to DNow cluster created under client account-->
+      <name>cluster</name>
+      <stringval>Nightly-Dnow</stringval>
+    </set>
+    
+    <set>
+     <!-- Access Key created for S3 bucket for this client -->
+      <name>access_key</name>
+      <stringval>AKIAJSZT7LGTGV4UYU7Q</stringval>
+    </set>
+    
+    <set>
+      <!-- Secret Key created for S3 bucket for this client -->
+      <name>secret_key</name>
+      <stringval>J2EmLBQr2XL3SLYOmSQ00XllhpJGCTkIs7cGRwPv</stringval>
+    </set>
+    
+    <set>
+      <!-- Regions for US clients should be us-east-1  and for EU client is : eu-central-1 -->
+      <name>region</name>
+      <stringval>us-east-1</stringval>
+    </set>
+    
+    <set>
+      <name>JARLOCATION</name>
+      <stringval>s3://qubole-nightly/warehouse/qa_nightly_1_jars</stringval>
+    </set>
+  </qubole_settings>
+</configroot>

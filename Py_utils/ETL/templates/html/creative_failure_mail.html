@@ -1,0 +1,45 @@
+<html>
+                <head>
+                </head>
+                <body>
+				{% if START_WEEK is not none and START_YEAR is not none and END_WEEK is not none and END_YEAR is not none %}
+					<h1 style="font-size: 30px;color: white;background-color:rgb(241, 53, 20);text-align: center;border:40px solid rgb(241, 53, 20);">Creative LMT update has failed which has started on {{TRIGGER_START_DATE}} <i>(timestamp: {{START_TIMESTAMP}})</i> from week {{START_WEEK}} of ({{START_YEAR}}) to week {{END_WEEK}} of ({{END_YEAR}}).</h1>
+				{% endif %}
+				<br>
+				<br>
+				{% if (START_WEEK is none or START_YEAR is none) and END_WEEK is not none and END_YEAR is not none %}
+					<h1 style="font-size: 30px;color: white;background-color:rgb(241, 53, 20);text-align: center;border:40px solid rgb(241, 53, 20);">Creative LMT update trigger till week {{END_WEEK}} of ({{END_YEAR}}) has failed which has started on {{TRIGGER_START_DATE}} <i>(timestamp: {{START_TIMESTAMP}})</i>.</h1>
+                <br>
+                <br>
+				{% endif %}
+                
+				{% if (START_WEEK is none or START_YEAR is none) and (END_WEEK is none or END_YEAR is none) %}
+					<h1 style="font-size: 30px;color: white;background-color:rgb(241, 53, 20);text-align: center;border:40px solid rgb(241, 53, 20);">Creative LMT update trigger  has failed which has started on {{TRIGGER_START_DATE}} <i>(timestamp: {{START_TIMESTAMP}})</i>.</h1>
+                <br>
+                <br>
+				{% endif %}
+                
+                {% if DESCRIPTION is not none %}
+					<p4><B>Description</B> : {{DESCRIPTION}}</p4>
+                <br>
+				<br>
+				{% endif %}
+                
+				{% if logs_loc is not none %}
+					<p1>Further details and logs are available at: <I>{{logs_loc}}</I></p1>
+				{% endif %}
+				{% if logs_loc is none %}
+					<p3>Please find the details and logs, in TV_ETL staging location of appropriate server based on given timestamp in header (started on)</p3>
+				{% endif %}
+                 <br>
+                 <br>
+                    
+                {% if STACK_TRACE is not none %}
+                <br>
+                <br>
+                <p5><B>Stack Trace:</B><br> 
+                <hr style="height: 10px; background: black; margin-bottom: 10px;">
+                {{STACK_TRACE}}</p5>
+				{% endif %}
+                </body>
+                </html>

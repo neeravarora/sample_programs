@@ -1,0 +1,11 @@
+{
+    "cluster" : "Nightly-Dnow",
+    "s3_location" : "s3://qubole-nightly/warehouse/qa_nightly_1",
+    "access_key" : "AKIAJSZT7LGTGV4UYU7Q",
+    "secret_key" : "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",
+    "token" : "e1b02a0b8d5443c1aafba175312842f6bd833247361048438f37df2cedd51943",
+    "url" : "https://api.qubole.com/api",
+    "region" :"us-east-1",
+    "JARLOCATION" : "'s3://qubole-nightly/warehouse/qa_nightly_1_jars"
+}
+

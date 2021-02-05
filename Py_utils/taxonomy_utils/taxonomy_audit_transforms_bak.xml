@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+	<main>
+		<xprod>
+			<xprodlist>hive_settings</xprodlist>
+		</xprod>
+        
+        <xprod>
+
+            <schema>
+
+                <outputrel external="true">
+
+                    <dbname><set>CLIENT_PROD_DB</set></dbname>
+
+                    <tablename>
+
+                        <text>ext_lmt_<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>subsource_name</element></xprodlist>_cs</text>
+
+                    </tablename>
+
+                </outputrel>
+
+                <attrs>
+
+                    <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>key-columns</element></xprodlist>
+                    <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>target-columns</element></xprodlist>
+                </attrs>
+
+                <fieldsterminatedby>
+
+                    <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>column_delimiter</element></xprodlist>
+
+                </fieldsterminatedby>
+
+                <linesterminatedby>
+
+                    <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>row_delimiter</element></xprodlist>
+
+                </linesterminatedby>
+
+                <rowformatserde>
+
+                    <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>serde</element></xprodlist>
+
+                </rowformatserde>
+
+                <serdeproperties>
+
+                    <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>serde_properties</element></xprodlist>
+
+                </serdeproperties>
+
+                <storedas>
+
+                    <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>storage_type</element></xprodlist>
+
+                </storedas>
+
+                <location>
+
+                    <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>location</element></xprodlist>
+
+                </location>
+
+                <tblproperties>
+
+                    <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>table_properties</element></xprodlist>
+
+                </tblproperties>
+
+            </schema>
+
+
+        </xprod>
+        
+        <!-- transform 2 on Hive enabled and spark disabled-->
+        <xprod>
+            <transform>
+                <ifgenerate>
+                    <not>                    
+                        <set>SPARK_ENABLED</set>
+                    </not>
+                </ifgenerate>
+				<outputrel>
+
+					<dbname><set>CLIENT_PROD_DB</set></dbname>
+
+				<tablename>
+
+					<text>temp_lmt_<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>subsource_name</element></xprodlist>_cs</text>
+
+				</tablename>
+
+				</outputrel>
+				<select>
+					
+					<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>key-columns</element></xprodlist>
+					<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>target-columns</element></xprodlist>
+					<expras>
+						<alias>row_num</alias>
+						<windowfunction>
+							<method>
+								<name>ROW_NUMBER</name>
+							</method>
+							<partitionby>
+								<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>key-columns</element></xprodlist>
+							</partitionby>
+							<orderby order="desc">
+								<attr order="desc">date_int</attr>
+							</orderby>
+							<window></window>
+						</windowfunction>
+					</expras>
+				</select>
+					
+            
+				<from>
+					<transform>
+						
+						<select>
+							
+							<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>key-columns</element></xprodlist>
+							<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>target-columns</element></xprodlist>
+							
+							<expras>
+								<alias>date_int</alias>
+								<val><text  skip_pattern_replacer = "True">
+                                    <const> cast(regexp_replace(regexp_extract(input__file__name,"^.*([0-9]{4}-[0-1][1-9]-[0-3][1-9]).*csv$",1), "(-)", "") as int) </const>
+                                    </text></val>
+							</expras>
+							
+						</select>
+						<from>
+							<rel>
+								<dbname><set>CLIENT_PROD_DB</set></dbname>
+								<tablename>
+							<text>ext_lmt_<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>subsource_name</element></xprodlist>_cs</text></tablename>
+							</rel>
+						</from>
+					</transform>
+				</from>
+			</transform>
+                        
+        </xprod>
+
+       <!-- transform 2 on spark enabled-->
+        <xprod>
+            <transform>
+                <ifgenerate>                    
+                    <set>SPARK_ENABLED</set>
+                </ifgenerate>
+				<outputrel>
+
+					<dbname><set>CLIENT_PROD_DB</set></dbname>
+
+				<tablename>
+
+					<text>temp_lmt_<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>subsource_name</element></xprodlist>_cs</text>
+
+				</tablename>
+
+				</outputrel>
+				<select>
+					
+					<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>key-columns</element></xprodlist>
+					<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>target-columns</element></xprodlist>
+					<expras>
+						<alias>row_num</alias>
+						<windowfunction>
+							<method>
+								<name>ROW_NUMBER</name>
+							</method>
+							<partitionby>
+								<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>key-columns</element></xprodlist>
+							</partitionby>
+							<orderby order="desc">
+								<attr order="desc">date_int</attr>
+							</orderby>
+							<window></window>
+						</windowfunction>
+					</expras>
+				</select>
+					
+            
+				<from>
+					<transform>
+						
+						<select>
+							
+							<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>key-columns</element></xprodlist>
+							<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>target-columns</element></xprodlist>
+							
+							<expras>
+								<alias>date_int</alias>
+								<val><text  skip_pattern_replacer = "True">
+                                    <const> cast(regexp_replace(regexp_extract(input_file_name(),"^.*([0-9]{4}-[0-1][1-9]-[0-3][1-9]).*csv$",1), "(-)", "") as int) </const>
+                                    </text></val>
+							</expras>
+							
+						</select>
+						<from>
+							<rel>
+								<dbname><set>CLIENT_PROD_DB</set></dbname>
+								<tablename>
+							<text>ext_lmt_<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>subsource_name</element></xprodlist>_cs</text></tablename>
+							</rel>
+						</from>
+					</transform>
+				</from>
+			</transform>
+                        
+        </xprod>
+        
+       <!-- 3 transform -->
+        <xprod>
+                <transform>
+                    <outputrel>
+
+						<dbname><set>CLIENT_PROD_DB</set></dbname>
+
+                    <tablename>
+
+                        <text>lmt_<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>subsource_name</element></xprodlist>_cs</text>
+
+                    </tablename>
+
+                    </outputrel>
+                    <select>
+                        <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>key-columns</element></xprodlist>
+                        <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>target-columns</element></xprodlist>
+                    </select>
+                    <from>
+                        <transform>
+                           
+                            <select>
+                                <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>key-columns</element></xprodlist>
+                                <expras>
+                                    <alias>min_row_num</alias>
+                                    <method>
+                                        <name>MIN</name>
+                                        <attr>row_num</attr>
+                                    </method>
+                                </expras>
+                            </select>
+                            <from>
+                                <rel>
+                                <dbname><set>CLIENT_PROD_DB</set></dbname>
+                                <tablename>
+                                    <text>temp_lmt_<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>subsource_name</element></xprodlist>_cs</text>
+                                </tablename>
+                                    </rel>
+                            </from>
+                            <groupby>
+                                <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>key-columns</element></xprodlist>
+                            </groupby>
+                        </transform>
+                        <rel>
+                            <dbname><set>CLIENT_PROD_DB</set></dbname>
+                            <tablename>
+                                <text>temp_lmt_<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>subsource_name</element></xprodlist>_cs</text>
+                            </tablename>
+                        </rel>
+                        <joinclause jointype="INNER JOIN">
+                            <joinattrs>
+                                <xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>key-columns</element></xprodlist>
+                             </joinattrs>
+                            <joinexpr>
+                                <leftexpr>
+                                    <attr>min_row_num</attr>
+                                </leftexpr>
+                                <rightexpr>
+                                    <attr>row_num</attr>
+                                </rightexpr>
+                             </joinexpr>
+                        </joinclause>
+                    </from>
+                </transform>
+        </xprod>
+        
+        <schema>
+
+			<createtableifnotexists>
+
+				<dbname><set>CLIENT_PROD_DB</set></dbname>
+
+				<tablename>
+					<text>CS_TAXONOMY_Audit</text>
+				</tablename>
+
+			</createtableifnotexists>
+
+			<attrs>
+				<attr datatype="string">total_count</attr>
+				<attr datatype="string">keys_count</attr>
+				<attr datatype="string">target_count</attr>
+				<attr datatype="string">taxonomy_group_name</attr>
+			</attrs>
+        <partitionedby>
+			<attr datatype="string">taxonomy_group_name</attr>
+		</partitionedby>
+			<storedas>TEXTFILE</storedas>
+			<tblproperties>'serialization.null.format'=''</tblproperties>
+
+		</schema>
+
+    
+        <transform>
+            <insertoverwritetable>
+                <rel>
+                    <dbname><set>CLIENT_PROD_DB</set></dbname>
+                    <tablename><text>CS_TAXONOMY_Audit</text></tablename>
+                </rel>
+                <partition>
+                    <attr datatype="STRING">taxonomy_group_name</attr>
+                </partition>
+            </insertoverwritetable>
+            <select>
+                    <attr datatype="string">total_count</attr>
+                    <attr datatype="string">keys_count</attr>
+                    <attr datatype="string">target_count</attr>
+                    <attr datatype="string">taxonomy_group_name</attr>
+            </select>
+            <from>
+                <unionall>
+                    <xprod>
+						<transform>
+							<select>
+								<expras>
+									<alias>taxonomy_group_name</alias>
+									<val><text><xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>subsource_name</element></xprodlist></text></val>
+								</expras>
+								<expras>
+									<alias>total_count</alias>
+									<countall></countall>
+								</expras>
+								<expras>
+									<alias>keys_count</alias>
+									<countdistinct>
+										<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>key-columns</element></xprodlist>
+									</countdistinct>
+								</expras>
+								<expras>
+									<alias>target_count</alias>
+									<countdistinct>
+										<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>target-columns</element></xprodlist>
+									</countdistinct>
+								</expras>
+
+							</select>
+							<from>
+								<rel>
+									<dbname><set>CLIENT_PROD_DB</set></dbname>
+									<tablename>
+										<text>lmt_<xprodlist>CS_TAXONOMY_LMT_SCHEMA_SET<element>subsource_name</element></xprodlist>_cs</text>
+									</tablename>
+								</rel>
+							</from>
+						</transform>
+					</xprod>
+                </unionall>
+            </from>
+        </transform>
+    
+    </main>
+</root>

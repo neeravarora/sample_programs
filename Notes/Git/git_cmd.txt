@@ -14,3 +14,31 @@
 > git checkout branch_name
 
 
+# commit Heirarchy
+>git log --all --color --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
+>git log --graph --simplify-by-decoration --pretty=format:'%d' --all
+
+>git log --all --graph --decorate --oneline
+
+>git log --graph --simplify-by-decoration --pretty=format:'%d'  master release/v11.0
+
+
+
+
+
+# Git Tags
+git tag -l | xargs git tag -d
+git fetch --tags
+
+//2
+git tag -l | xargs git tag -d && git fetch -t
+
+
+//3
+git fetch --tags --prune
+git fetch --prune --prune-tags origin
+
+
+
+

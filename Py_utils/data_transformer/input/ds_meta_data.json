@@ -1,0 +1,41 @@
+{
+    "constants" :{"s3loc":"value"},
+    "default_db":"tv_mta_staging",
+    "datasourceList":[
+        {
+            "datasource_name":"",
+            "category":"",
+            "type":"hiveTableOnHive",
+            "db":"",
+            "columns":[],
+            "source":[
+                {   
+                    "datasource_name" : "",
+                    "db":"tv_kantar",
+                    "table":"advertiser"
+                },
+                {  
+                    "datasource_name" : "",
+                    "db":"tv_kantar",
+                    "table":"advertiser"
+                }
+            ]
+        },
+        { 
+            "datasource_name":"",
+            "category":"",
+            "type":"hiveTableOnS3",
+            "source":[
+                "s3://abc",
+                "s3://cde"
+            ],
+            "included_pattern" :"",
+            "excluded_pattern" :"",
+            "hive_script_str" :"",
+            "hive_script_loc" :"",
+            "hive_script_parameters":{},
+            "prerequisite_ds" :[]
+        }
+    ]
+
+}
